@@ -1,7 +1,7 @@
 import sys
 
 from isa import Opcode, Term, write_code
-
+from translator_exceptions import *
 
 commands = {
     "+",
@@ -25,6 +25,14 @@ commands = {
     "if",
     "else",
     "endif"
+}
+
+loop_branch_commands = {
+    "if",
+    "else",
+    "endif",
+    "begin",
+    "until"
 }
 
 
@@ -59,15 +67,64 @@ def symbol2opcode(symbol):
 
 def text2terms(text):
     terms = []
-    for number, line in enumerate(text.split("\n"), 1):
-        words = line.split(" ")
-        if len(words) == 1 and words[0] in commands:
-            terms.append(Term(number, line))
-        if len(words) == 1 and is_number(words[0]):
-            terms.append((Term(number, line)))
-        if len(words) == 2:
-            if words[0] == 'variable' or words[1] in commands:
-                terms.append(Term(number, line))
+    procedures = {}
+    is_procedure = False
+    is_procedure_name = False
+    branch_counter = 0
+    loop_counter = 0
+    procedure_name = ""
+    for line_number, line in enumerate(text.split("\n"), 1):
+        for word_number, word in enumerate(line.strip().split(" "), 1):
+            if is_procedure_name:
+                procedure_name = str(word)
+                procedures[procedure_name] = []
+                is_procedure_name = False
+            elif is_number(word) or word in commands:
+                if is_procedure:
+                    procedures[procedure_name].append(Term(line_number, word))
+                else:
+                    terms.append(Term(line_number, word))
+            elif word == ":":
+                if branch_counter == 0 and loop_counter == 0:
+                    if not is_procedure:
+                        is_procedure = True
+                        is_procedure_name = True
+                    else:
+                        raise NestedProcedureCreationError(line_number, word_number, word)
+                else:
+                    if branch_counter == 0:
+                        raise StartedProcedureInBranchError(line_number, word_number, word)
+                    if loop_counter == 0:
+                        raise StartedProcedureInLoopError(line_number, word_number, word)
+            elif word == ";":
+                if branch_counter == 0 and loop_counter == 0:
+                    if is_procedure:
+                        is_procedure = False
+                    else:
+                        raise EndingProcedureError(line_number, word_number, word)
+                else:
+                    if branch_counter == 0:
+                        raise EndingProcedureBeforeClosingBranchError(line_number, word_number, word)
+                    if loop_counter == 0:
+                        raise EndingProcedureBeforeClosingLoopError(line_number, word_number, word)
+            elif word in procedures.keys():
+                for procedure_term in procedures[word]:
+                    terms.append(procedure_term)
+            else:
+                raise InvalidInputError(line_number, word_number, word)
+
+            if word == "if":
+                branch_counter -= 1
+            if word == "endif":
+                branch_counter += 1
+            if word == "begin":
+                loop_counter -= 1
+            if word == "until":
+                loop_counter += 1
+    if branch_counter < 0:
+        raise BranchesNotBalancedError
+    if loop_counter < 0:
+        raise LoopNotBalancedError
     return terms
 
 
@@ -85,7 +142,8 @@ def translate(text):
                 jmp_stack.append(count)
             elif words[0] == "else":
                 if_index = jmp_stack.pop()
-                machine_code[if_index] = ({"index": if_index, "opcode": Opcode.JF.value, "arg": count + 1, "term": terms[if_index]})
+                machine_code[if_index] = (
+                {"index": if_index, "opcode": Opcode.JF.value, "arg": count + 1, "term": terms[if_index]})
                 machine_code.append(None)
                 jmp_stack.append(count)
                 else_flag = True
@@ -93,9 +151,11 @@ def translate(text):
                 if_index = jmp_stack.pop()
                 count -= 1
                 if else_flag:
-                    machine_code[if_index] = ({"index": if_index, "opcode": Opcode.JMP.value, "arg": count + 1, "tern": terms[if_index]})
+                    machine_code[if_index] = (
+                    {"index": if_index, "opcode": Opcode.JMP.value, "arg": count + 1, "tern": terms[if_index]})
                 else:
-                    machine_code[if_index] = ({"index": if_index, "opcode": Opcode.JF.value, "arg": count + 1, "term": terms[if_index]})
+                    machine_code[if_index] = (
+                    {"index": if_index, "opcode": Opcode.JF.value, "arg": count + 1, "term": terms[if_index]})
             elif words[0] == "begin":
                 jmp_stack.append(count)
                 count -= 1
@@ -112,21 +172,18 @@ def translate(text):
     return machine_code
 
 
+def main(source, target):
+    with open(source, encoding="utf-8") as file:
+        source = file.read()
+
+    code = translate(source)
+
+    write_code(target, code)
+    print(f'Translated successfully. Source LoC: {len(source.split("\n"))} Code instruction: {len(code)}')
+
+
 if __name__ == "__main__":
-    test = ("begin\n"
-            "#\n"
-            "dup\n"
-            "0\n"
-            "=\n"
-            "if\n"
-            ".\n"
-            "else\n"
-            "#\n"
-            "endif\n"
-            ".\n"
-            "until"
-            )
-    # assert len(sys.argv) == 3, "Error: should be 3 arguments translator.py <input> <output>"
-    code = translate(test)
-    for i in code:
-        print(i)
+    if len(sys.argv) != 3:
+        raise WrongArgumentsError
+    _, input_file, output_file = sys.argv
+    main(input_file, output_file)
