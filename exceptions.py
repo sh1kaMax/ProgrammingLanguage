@@ -43,6 +43,21 @@ class LoopNotBalancedError(Exception):
         super().__init__(f'Error: not balanced count of \'begin\' and \'until\'')
 
 
-class WrongArgumentsError(Exception):
+class WrongTranslatorArgumentsError(Exception):
     def __init__(self):
-        super().__init__(f'Error: wrong number of arguments (translator.py <input> <output>)')
+        super().__init__(f'Error: wrong number of arguments (translator.py <input_file> <output_file>)')
+
+
+class WrongMachineArguments(Exception):
+    def __init__(self):
+        super().__init__(f'Error: wrong number of arguments (machine.py <machine_code_file> <input_file>')
+
+
+class StackOverflowError(Exception):
+    def __init__(self, max_size):
+        super().__init__(f'Error: stack is overflowed (max_size is {max_size})')
+
+
+class StackUnderflowError(Exception):
+    def __init__(self):
+        super().__init__(f'Error: stack is underflow')

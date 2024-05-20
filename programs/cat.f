@@ -8,3 +8,5 @@
     until
 ;
 cat
+1 my_word !
+my_word @
