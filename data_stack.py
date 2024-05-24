@@ -7,7 +7,7 @@ class Stack:
 
     def __init__(self, max_size):
         self.stack = []
-        self.stack = max_size
+        self.max_size = max_size
 
     def push(self, arg):
         if len(self.stack) == self.max_size:

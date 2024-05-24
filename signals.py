@@ -1,17 +1,23 @@
 from enum import Enum
 
 
-class StackSignals(Enum):
-    DSPush = 0
-    DSPop = 1
-    RSPush = 2
-    RSPop = 3
+class DataStackSignals(Enum):
+    Push = 0
+    Pop = 1
 
 
 class ARLatch(Enum):
-    IR = 0
+    PC = 0
     TOS = 1
-    INC = 2
+
+
+class IRLatch(Enum):
+    MEM = 0
+
+
+class PCLatch(Enum):
+    IR = 0
+    INC = 1
 
 
 class TosLatch(Enum):
@@ -21,9 +27,8 @@ class TosLatch(Enum):
     ALU = 3
 
 
-class DataStackToALULatch(Enum):
-    DataStack = 0
-    Zero = 1
+class ValueToALULatch(Enum):
+    GetValues = 0
 
 
 class AluLatch(Enum):
@@ -32,8 +37,44 @@ class AluLatch(Enum):
     MUL = 2
     DIV = 3
     MOD = 4
+    NOT_EQ = 5
+    EQ = 6
+    MORE = 7
+    LESS = 8
 
 
 class MemorySignal(Enum):
     MemRead = 0
     MemWrite = 1
+    TOS = 2
+
+
+class MCAdrLatch(Enum):
+    IR = 0
+    INC = 1
+    ZERO = 2
+
+
+class BRLatch(Enum):
+    DS = 0
+
+
+class checkFlag(Enum):
+    z = 0
+    n = 1
+    v = 2
+
+
+class JUMPS(Enum):
+    JMP = 0
+    JZS = 1
+
+
+class IOLatch(Enum):
+    PRINT = 0
+    READ = 1
+    EMIT = 2
+
+
+class PROG(Enum):
+    HALT = 0

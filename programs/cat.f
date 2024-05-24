@@ -1,12 +1,11 @@
 : cat
     begin
-        # dup
+        # dup dup
+        0 !=
         if
-            .
+            emit
         endif
         0 =
     until
 ;
 cat
-1 my_word !
-my_word @

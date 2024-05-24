@@ -1,16 +1,24 @@
 from isa import Opcode
 
 ALU_COMMANDS = [
-    # 0 #
+    # SUM - 0
     lambda x, y: x + y,
-    # 1 #
+    # SUB - 1
     lambda x, y: x - y,
-    # 2 #
+    # MUL - 2
     lambda x, y: x * y,
-    # 3 #
+    # DIV - 3
     lambda x, y: x // y,
-    # 4 #
-    lambda x, y: x % y
+    # MOD - 4
+    lambda x, y: x % y,
+    # NOT EQ - 5
+    lambda x, y: 1 if x != y else 0,
+    # EQ - 6
+    lambda x, y: 1 if x == y else 0,
+    # MORE - 7
+    lambda x, y: 1 if x > y else 0,
+    # LESS - 8
+    lambda x, y: 1 if x < y else 0
 ]
 
 MAX_NUMBER = 2 ** 31 - 1

@@ -15,6 +15,7 @@ commands = {
     "begin",
     "until",
     "=",
+    "!=",
     ">",
     "<",
     ".",
@@ -24,7 +25,8 @@ commands = {
     "#",
     "if",
     "else",
-    "endif"
+    "endif",
+    "emit"
 }
 
 loop_branch_commands = {
@@ -35,7 +37,8 @@ loop_branch_commands = {
     "until"
 }
 
-variable_names = []
+variable_names = {}
+
 
 def is_number(maybe_number):
     try:
@@ -62,11 +65,14 @@ def symbol2opcode(symbol):
         "exit": Opcode.HALT.value,
         "!": Opcode.SAVE_VAR.value,
         "@": Opcode.VAR_ON_TOP.value,
-        "#": Opcode.READ.value
+        "#": Opcode.READ.value,
+        "emit": Opcode.EMIT.value,
+        "!=": Opcode.NOT_EQ.value
     }.get(symbol)
 
 
 def text2terms(text):
+    var_counter = 1
     terms = []
     procedures = {}
     is_procedure = False
@@ -75,67 +81,140 @@ def text2terms(text):
     loop_counter = 0
     procedure_name = ""
     for line_number, line in enumerate(text.split("\n"), 1):
-        line_words = line.strip().split(" ")
-        for word_number, word in enumerate(line.strip().split(" "), 1):
-            if is_procedure_name:
-                procedure_name = str(word)
-                procedures[procedure_name] = []
-                is_procedure_name = False
-            elif is_number(word) or word in commands:
-                if is_procedure:
-                    procedures[procedure_name].append(Term(line_number, word_number, word))
-                else:
-                    terms.append(Term(line_number, word_number, word))
-            elif word == ":":
-                if branch_counter == 0 and loop_counter == 0:
-                    if not is_procedure:
-                        is_procedure = True
-                        is_procedure_name = True
-                    else:
-                        raise NestedProcedureCreationError(line_number, word_number, word)
-                else:
-                    if branch_counter == 0:
-                        raise StartedProcedureInBranchError(line_number, word_number, word)
-                    if loop_counter == 0:
-                        raise StartedProcedureInLoopError(line_number, word_number, word)
-            elif word == ";":
-                if branch_counter == 0 and loop_counter == 0:
-                    if is_procedure:
-                        is_procedure = False
-                    else:
-                        raise EndingProcedureError(line_number, word_number, word)
-                else:
-                    if branch_counter == 0:
-                        raise EndingProcedureBeforeClosingBranchError(line_number, word_number, word)
-                    if loop_counter == 0:
-                        raise EndingProcedureBeforeClosingLoopError(line_number, word_number, word)
-            elif word in procedures.keys():
-                for procedure_term in procedures[word]:
-                    terms.append(procedure_term)
-            else:
-                if line_words[word_number] == '!' or line_words[word_number] == '@':
-                    if word not in variable_names:
-                        variable_names.append(word)
+        if line != '':
+            line_words = line.strip().split(" ")
+            for word_number, word in enumerate(line.strip().split(" "), 1):
+                if is_procedure_name:
+                    procedure_name = str(word)
+                    procedures[procedure_name] = []
+                    is_procedure_name = False
+                elif is_number(word) or word in commands:
                     if is_procedure:
                         procedures[procedure_name].append(Term(line_number, word_number, word))
                     else:
                         terms.append(Term(line_number, word_number, word))
+                elif word == ":":
+                    if branch_counter == 0 and loop_counter == 0:
+                        if not is_procedure:
+                            is_procedure = True
+                            is_procedure_name = True
+                        else:
+                            raise NestedProcedureCreationError(line_number, word_number, word)
+                    else:
+                        if branch_counter == 0:
+                            raise StartedProcedureInBranchError(line_number, word_number, word)
+                        if loop_counter == 0:
+                            raise StartedProcedureInLoopError(line_number, word_number, word)
+                elif word == ";":
+                    if branch_counter == 0 and loop_counter == 0:
+                        if is_procedure:
+                            is_procedure = False
+                        else:
+                            raise EndingProcedureError(line_number, word_number, word)
+                    else:
+                        if branch_counter == 0:
+                            raise EndingProcedureBeforeClosingBranchError(line_number, word_number, word)
+                        if loop_counter == 0:
+                            raise EndingProcedureBeforeClosingLoopError(line_number, word_number, word)
+                elif word in procedures.keys():
+                    for procedure_term in procedures[word]:
+                        terms.append(procedure_term)
+                elif word[0:2] == ".\"":
+                    break
                 else:
-                    raise InvalidInputError(line_number, word_number, word)
+                    if line_words[word_number] == '!' or line_words[word_number] == '@':
+                        if word not in variable_names:
+                            variable_names[word] = var_counter
+                            var_counter += 1
+                        if is_procedure:
+                            procedures[procedure_name].append(Term(line_number, word_number, word))
+                        else:
+                            terms.append(Term(line_number, word_number, word))
+                    else:
+                        raise InvalidInputError(line_number, word_number, word)
 
-            if word == "if":
-                branch_counter -= 1
-            if word == "endif":
-                branch_counter += 1
-            if word == "begin":
-                loop_counter -= 1
-            if word == "until":
-                loop_counter += 1
+                if word == "if":
+                    branch_counter -= 1
+                if word == "endif":
+                    branch_counter += 1
+                if word == "begin":
+                    loop_counter -= 1
+                if word == "until":
+                    loop_counter += 1
+            if line[0:2] == ".\"":
+                variable_names[line[3:-1]] = var_counter
+                var_counter += len(line[3:-1])
+                terms.append(Term(line_number, 1, line))
     if branch_counter < 0:
         raise BranchesNotBalancedError
     if loop_counter < 0:
         raise LoopNotBalancedError
     return terms
+
+
+def translate_string(str, count, line_number):
+    massive = []
+    next_skip = False
+    string_len = len(str) - str.count("\\n")
+    string_adr = variable_names[str]
+    massive.append({"index": count, "opcode": Opcode.PUSH.value, "arg": string_len})
+    count += 1
+    massive.append(({"index": count, "opcode": Opcode.ADDR_ON_TOP.value, "arg": string_adr}))
+    string_adr += 1
+    count += 1
+    massive.append(({"index": count, "opcode": Opcode.SAVE_VAR.value}))
+    count += 1
+    for symbol_number, symbol in enumerate(str, 0):
+        if symbol == '\\':
+            symbol = '\n'
+        if not next_skip:
+            massive.append({"index": count, "opcode": Opcode.PUSH.value, "arg": ord(symbol), "term": Term(line_number, symbol_number, symbol)})
+            count += 1
+            massive.append({"index": count, "opcode": Opcode.ADDR_ON_TOP.value, "arg": string_adr})
+            string_adr += 1
+            count += 1
+            massive.append({"index": count, "opcode": Opcode.SAVE_VAR.value})
+            count += 1
+            if symbol == '\n':
+                next_skip = True
+        else:
+            next_skip = False
+    massive.append({"index": count, "opcode": Opcode.ADDR_ON_TOP.value, "arg": variable_names[str]})
+    count += 1
+    jmp_index = count
+    massive.append({"index": count, "opcode": Opcode.PUSH.value, "arg": 1})
+    count += 1
+    massive.append({"index": count, "opcode": Opcode.SUM.value})
+    count += 1
+    massive.append({"index": count, "opcode": Opcode.DUP.value})
+    count += 1
+    massive.append({"index": count, "opcode": Opcode.VAR_ON_TOP.value})
+    count += 1
+    massive.append({"index": count, "opcode": Opcode.EMIT.value})
+    count += 1
+    massive.append({"index": count, "opcode": Opcode.DUP.value})
+    count += 1
+    massive.append({"index": count, "opcode": Opcode.ADDR_ON_TOP.value, "arg": variable_names[str]})
+    count += 1
+    massive.append({"index": count, "opcode": Opcode.SWAP.value})
+    count += 1
+    massive.append({"index": count, "opcode": Opcode.SUB.value})
+    count += 1
+    massive.append({"index": count, "opcode": Opcode.ADDR_ON_TOP.value, "arg": variable_names[str]})
+    count += 1
+    massive.append({"index": count, "opcode": Opcode.VAR_ON_TOP.value})
+    count += 1
+    massive.append({"index": count, "opcode": Opcode.SUB.value})
+    count += 1
+    massive.append({"index": count, "opcode": Opcode.PUSH.value, "arg": 0})
+    count += 1
+    massive.append({"index": count, "opcode": Opcode.EQ.value})
+    count += 1
+    massive.append({"index": count, "opcode": Opcode.JZS.value, "arg": jmp_index})
+    count += 1
+    massive.append({"index": count, "opcode": Opcode.DROP.value})
+    count += 1
+    return massive, count
 
 
 def translate(text):
@@ -151,7 +230,7 @@ def translate(text):
             jmp_stack.append(count)
         elif words[0] == "else":
             if_index = jmp_stack.pop()
-            machine_code[if_index] = {"index": if_index, "opcode": Opcode.JF.value, "arg": count + 1, "term": terms[if_index]}
+            machine_code[if_index] = {"index": if_index, "opcode": Opcode.JZS.value, "arg": count + 1, "term": terms[if_index]}
             machine_code.append(None)
             jmp_stack.append(count)
             else_flag = True
@@ -159,19 +238,24 @@ def translate(text):
             if_index = jmp_stack.pop()
             count -= 1
             if else_flag:
-                machine_code[if_index] = {"index": if_index, "opcode": Opcode.JMP.value, "arg": count + 1, "tern": terms[if_index]}
+                machine_code[if_index] = {"index": if_index, "opcode": Opcode.JMP.value, "arg": count + 1}
             else:
-                machine_code[if_index] = {"index": if_index, "opcode": Opcode.JF.value, "arg": count + 1, "term": terms[if_index]}
+                machine_code[if_index] = {"index": if_index, "opcode": Opcode.JZS.value, "arg": count + 1}
         elif words[0] == "begin":
             jmp_stack.append(count)
             count -= 1
         elif words[0] == "until":
             jmp_index = jmp_stack.pop()
-            machine_code.append({"index": count, "opcode": Opcode.JF.value, "arg": jmp_index, "term": terms[count]})
+            machine_code.append({"index": count, "opcode": Opcode.JZS.value, "arg": jmp_index})
         elif is_number(words[0]):
             machine_code.append({"index": count, "opcode": Opcode.PUSH.value, "arg": words[0], "term": term})
         elif words[0] in variable_names:
-            machine_code.append({"index": count, "opcode": Opcode.SET_ADR.value, "arg": words[0], "term": term})
+            machine_code.append({"index": count, "opcode": Opcode.ADDR_ON_TOP.value, "arg": variable_names[words[0]], "term": term})
+        elif words[0] == ".\"":
+            massive, plus_count = translate_string(str(' '.join(words)[3:-1]), count, term.line)
+            count = plus_count - 1
+            for i in massive:
+                machine_code.append(i)
         else:
             machine_code.append({"index": count, "opcode": symbol2opcode(words[0]), "term": term})
         count += 1
@@ -189,7 +273,9 @@ def main(source, target):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) != 3:
-        raise WrongTranslatorArgumentsError
-    _, input_file, output_file = sys.argv
+    # if len(sys.argv) != 3:
+    #     raise WrongTranslatorArgumentsError
+    # _, input_file, output_file = sys.argv
+    input_file = "./programs/test"
+    output_file = "./programs/test_machine_code"
     main(input_file, output_file)

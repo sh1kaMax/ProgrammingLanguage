@@ -61,3 +61,8 @@ class StackOverflowError(Exception):
 class StackUnderflowError(Exception):
     def __init__(self):
         super().__init__(f'Error: stack is underflow')
+
+
+class InvalidSignalError(Exception):
+    def __init__(self, signal):
+        super().__init__(f'Error: signa {signal} does not exist')

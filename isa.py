@@ -11,22 +11,23 @@ class Opcode(str, Enum):
     MOD = "mod"
 
     DUP = "dup"
+    PUSH = "push"
     DROP = "drop"
     SWAP = "swap"
 
+    NOT_EQ = "not_eq"
     EQ = "eq"
     MORE = "more"
     LESS = "less"
 
     PRINT = "print"
+    EMIT = "emit"
     READ = "read"
-    PUSH = "push"
-    INPUT = "input"
-    SET_ADR = "set_addr"
+    ADDR_ON_TOP = "addr_on_top"
     SAVE_VAR = "save_var"
     VAR_ON_TOP = "var_on_top"
 
-    JF = "jF"
+    JZS = "jzs"
     JMP = "jmp"
     HALT = "halt"
 
