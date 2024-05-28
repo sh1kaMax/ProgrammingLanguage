@@ -5,11 +5,14 @@ on:
     branches:
       - master
     paths:
-      - ./*.py
-      - ./*.lock
-      - ./pyproject.toml
-      - ./golden/*
-      - .github/workflows/python.yaml
+      - ".github/workflows/*"
+      - "./**"
+  pull_request:
+    branches:
+      - master
+    paths:
+      - ".github/workflows/*"
+      - "./**"
 defaults:
   run:
     working-directory: ./
