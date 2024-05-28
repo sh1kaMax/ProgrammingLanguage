@@ -3,6 +3,7 @@ import logging
 from data_stack import Stack
 from signals import *
 from alu import ALU
+
 STACK_SIZE = 64
 SIZE_FOR_VARS = 150
 INSTRACTION_LIMIT = 100000
@@ -137,7 +138,7 @@ class DataPath:
         match signal:
             case IOLatch.PRINT:
                 self.output_buffer.append(str(self.top_of_stack))
-                logging.debug("output: " + ''.join(self.output_buffer) + "<<" + str(self.top_of_stack))
+                logging.debug("output: " + "".join(self.output_buffer) + "<<" + str(self.top_of_stack))
             case IOLatch.READ:
                 if len(self.input_buffer) == 0:
                     logging.warning("No input from user!")
@@ -146,7 +147,7 @@ class DataPath:
                 logging.debug("input: " + chr(self.top_of_stack))
             case IOLatch.EMIT:
                 self.output_buffer.append(chr(self.top_of_stack))
-                logging.debug("output: " + ''.join(self.output_buffer) + "<<" + chr(self.top_of_stack))
+                logging.debug("output: " + "".join(self.output_buffer) + "<<" + chr(self.top_of_stack))
 
     def jump(self, signal):
         match signal:

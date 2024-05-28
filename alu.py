@@ -16,11 +16,11 @@ ALU_COMMANDS = [
     # MORE - 7
     lambda x, y: 1 if x < y else 0,
     # LESS - 8
-    lambda x, y: 1 if x > y else 0
+    lambda x, y: 1 if x > y else 0,
 ]
 
-MAX_NUMBER = 2 ** 31 - 1
-MIN_NUMBER = -2 ** 31
+MAX_NUMBER = 2**31 - 1
+MIN_NUMBER = -(2**31)
 
 
 class ALU:

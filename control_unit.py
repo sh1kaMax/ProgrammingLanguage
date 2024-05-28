@@ -124,18 +124,19 @@ class ControlUnit:
         self.instraction_count = 0
 
     def __repr__(self, signal):
-        state_repr = ("TICK: {:4} PC: {:3} ADDR: {:3} mcADDR: {:2} SIGNAL: {:15} TOS: {:6} Z: {:1} N: {:1} V: {:1}\n"
-                      "DS: {}").format(
+        state_repr = (
+            "TICK: {:4} PC: {:3} ADDR: {:3} mcADDR: {:2} SIGNAL: {:15} TOS: {:6} Z: {:1} N: {:1} V: {:1}\n" "DS: {}"
+        ).format(
             str(self.tick),
             str(self.datapath.pc),
             str(self.datapath.address_register),
             str(self.mcAdr),
             str(signal),
-            str(self.datapath.top_of_stack) if self.datapath.top_of_stack is not None else '0',
+            str(self.datapath.top_of_stack) if self.datapath.top_of_stack is not None else "0",
             str(self.datapath.alu.z_flag),
             str(self.datapath.alu.n_flag),
             str(self.datapath.alu.v_flag),
-            self.datapath.data_stack.stack
+            self.datapath.data_stack.stack,
         )
         return state_repr
 
@@ -180,7 +181,7 @@ class ControlUnit:
     def mcAdr_latch(self, signal):
         match signal:
             case MCAdrLatch.IR:
-                self.mcAdr = opcode2microcode(self.datapath.instraction_register['opcode'])
+                self.mcAdr = opcode2microcode(self.datapath.instraction_register["opcode"])
             case MCAdrLatch.INC:
                 self.mcAdr += 1
             case MCAdrLatch.ZERO:
@@ -195,7 +196,7 @@ class ControlUnit:
         except IOError:
             pass
         output = ""
-        for stroka in ''.join(self.datapath.output_buffer).split("\n"):
+        for stroka in "".join(self.datapath.output_buffer).split("\n"):
             output += f'{4 * '\t'}{stroka}\n'
         logging.debug("output_buffer: \n" + output[0:-1])
         return self.datapath.output_buffer, self.instraction_count, self.tick

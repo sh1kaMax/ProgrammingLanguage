@@ -26,16 +26,10 @@ commands = {
     "if",
     "else",
     "endif",
-    "emit"
+    "emit",
 }
 
-loop_branch_commands = {
-    "if",
-    "else",
-    "endif",
-    "begin",
-    "until"
-}
+loop_branch_commands = {"if", "else", "endif", "begin", "until"}
 
 variable_names = {}
 vars_count = []
@@ -68,7 +62,7 @@ def symbol2opcode(symbol):
         "@": Opcode.VAR_ON_TOP.value,
         "#": Opcode.READ.value,
         "emit": Opcode.EMIT.value,
-        "!=": Opcode.NOT_EQ.value
+        "!=": Opcode.NOT_EQ.value,
     }.get(symbol)
 
 
@@ -82,7 +76,7 @@ def text2terms(text):
     loop_counter = 0
     procedure_name = ""
     for line_number, line in enumerate(text.split("\n"), 1):
-        if line != '':
+        if line != "":
             line_words = line.strip().split(" ")
             for word_number, word in enumerate(line.strip().split(" "), 1):
                 if is_procedure_name:
@@ -120,10 +114,10 @@ def text2terms(text):
                 elif word in procedures.keys():
                     for procedure_term in procedures[word]:
                         terms.append(procedure_term)
-                elif word[0:2] == ".\"":
+                elif word[0:2] == '."':
                     break
                 else:
-                    if line_words[word_number] == '!' or line_words[word_number] == '@':
+                    if line_words[word_number] == "!" or line_words[word_number] == "@":
                         if word not in variable_names:
                             variable_names[word] = var_counter
                             vars_count.append(word)
@@ -143,7 +137,7 @@ def text2terms(text):
                     loop_counter -= 1
                 if word == "until":
                     loop_counter += 1
-            if line[0:2] == ".\"":
+            if line[0:2] == '."':
                 variable_names[line[3:-1]] = var_counter
                 var_counter += len(line[3:-1])
                 terms.append(Term(line_number, 1, line))
@@ -216,8 +210,12 @@ def translate(text):
             jmp_stack.append(count)
         elif words[0] == "else":
             if_index = jmp_stack.pop()
-            machine_code[if_index] = {"index": if_index, "opcode": Opcode.JZS.value, "arg": count + 1,
-                                      "term": terms[if_index]}
+            machine_code[if_index] = {
+                "index": if_index,
+                "opcode": Opcode.JZS.value,
+                "arg": count + 1,
+                "term": terms[if_index],
+            }
             machine_code.append(None)
             jmp_stack.append(count)
             else_flag = True
@@ -238,10 +236,11 @@ def translate(text):
             machine_code.append({"index": count, "opcode": Opcode.PUSH.value, "arg": words[0], "term": term})
         elif words[0] in variable_names:
             machine_code.append(
-                {"index": count, "opcode": Opcode.ADDR_ON_TOP.value, "arg": variable_names[words[0]], "term": term})
-        elif words[0] == ".\"":
-            strings.append(str(' '.join(words)[3:-1]))
-            massive, plus_count = translate_string(str(' '.join(words)[3:-1]), count)
+                {"index": count, "opcode": Opcode.ADDR_ON_TOP.value, "arg": variable_names[words[0]], "term": term}
+            )
+        elif words[0] == '."':
+            strings.append(str(" ".join(words)[3:-1]))
+            massive, plus_count = translate_string(str(" ".join(words)[3:-1]), count)
             count = plus_count - 1
             for i in massive:
                 machine_code.append(i)
