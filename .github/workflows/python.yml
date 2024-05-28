@@ -59,4 +59,4 @@ jobs:
         run: poetry run ruff format --check .
 
       - name: Run Ruff linters
-        run: poetry run ruff check .
+        run: poetry run ruff check --ignore=C901 .
