@@ -1,8 +1,8 @@
 import logging
 
-from data_stack import Stack
-from signals import *
 from alu import ALU
+from data_stack import Stack
+from signals import JUMPS, AluLatch, ARLatch, DSLatch, IOLatch, MEMSignal, PCLatch, TosLatch
 
 STACK_SIZE = 64
 SIZE_FOR_VARS = 150
@@ -142,7 +142,7 @@ class DataPath:
             case IOLatch.READ:
                 if len(self.input_buffer) == 0:
                     logging.warning("No input from user!")
-                    raise IOError()
+                    raise OSError()
                 self.top_of_stack = ord(self.input_buffer.pop(0))
                 logging.debug("input: " + chr(self.top_of_stack))
             case IOLatch.EMIT:

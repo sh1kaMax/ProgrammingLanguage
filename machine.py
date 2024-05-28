@@ -1,9 +1,10 @@
 import logging
 import sys
-from data_path import DataPath
+
 from control_unit import ControlUnit
-from exceptions import *
-from isa import *
+from data_path import DataPath
+from exceptions import WrongMachineArgumentsError
+from isa import read_code
 
 
 def main(code_file, input_file):
@@ -21,12 +22,12 @@ def main(code_file, input_file):
     control_unit = ControlUnit(data_path)
     output, inst_count, tick_count = control_unit.run_machine()
 
-    print(f'{''.join(output)}\n\ninstraction_count: {str(inst_count)}\ntick: {str(tick_count)}')
+    print(f"{''.join(output)}\n\ninstraction_count: {inst_count!s}\ntick: {tick_count!s}")
 
 
 if __name__ == "__main__":
     if len(sys.argv) != 4:
-        raise WrongMachineArguments
+        raise WrongMachineArgumentsError
     _, code_input, input_file_name, log_name = sys.argv
     logging.getLogger().setLevel(logging.DEBUG)
 

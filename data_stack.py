@@ -1,4 +1,4 @@
-from exceptions import StackOverflowError, StackUnderflowError
+from exceptions import StackOverflowError
 
 
 class Stack:

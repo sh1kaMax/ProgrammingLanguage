@@ -37,22 +37,22 @@ class EndingProcedureBeforeClosingLoopError(Exception):
 
 class BranchesNotBalancedError(Exception):
     def __init__(self):
-        super().__init__(f"Error: not balanced count of 'if' and 'endif'")
+        super().__init__("Error: not balanced count of 'if' and 'endif'")
 
 
 class LoopNotBalancedError(Exception):
     def __init__(self):
-        super().__init__(f"Error: not balanced count of 'begin' and 'until'")
+        super().__init__("Error: not balanced count of 'begin' and 'until'")
 
 
 class WrongTranslatorArgumentsError(Exception):
     def __init__(self):
-        super().__init__(f"Error: wrong number of arguments (translator.py <input_file> <output_file>)")
+        super().__init__("Error: wrong number of arguments (translator.py <input_file> <output_file>)")
 
 
-class WrongMachineArguments(Exception):
+class WrongMachineArgumentsError(Exception):
     def __init__(self):
-        super().__init__(f"Error: wrong number of arguments (machine.py <machine_code_file> <input_file> <log_file>")
+        super().__init__("Error: wrong number of arguments (machine.py <machine_code_file> <input_file> <log_file>")
 
 
 class StackOverflowError(Exception):
@@ -62,9 +62,9 @@ class StackOverflowError(Exception):
 
 class StackUnderflowError(Exception):
     def __init__(self):
-        super().__init__(f"Error: stack is underflow")
+        super().__init__("Error: stack is underflow")
 
 
 class InvalidSignalError(Exception):
     def __init__(self, signal):
-        super().__init__(f"Error: signa {signal} does not exist")
+        super().__init__(f"Error: signal {signal} does not exist")

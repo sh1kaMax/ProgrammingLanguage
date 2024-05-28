@@ -60,7 +60,7 @@ class BRLatch(Enum):
     DS = 0
 
 
-class checkFlag(Enum):
+class CheckFlag(Enum):
     z = 0
     n = 1
     v = 2

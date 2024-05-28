@@ -1,8 +1,25 @@
-from isa import Opcode
 import logging
-from signals import *
+from typing import ClassVar
+
 from data_path import INSTRACTION_LIMIT
 from exceptions import InvalidSignalError
+from isa import Opcode
+from signals import (
+    JUMPS,
+    PROG,
+    AluLatch,
+    ALUValues,
+    ARLatch,
+    BRLatch,
+    DSLatch,
+    Instraction,
+    IOLatch,
+    IRLatch,
+    MCAdrLatch,
+    MEMSignal,
+    PCLatch,
+    TosLatch,
+)
 
 
 def opcode2microcode(opcode):
@@ -112,25 +129,41 @@ microcode = [
 
 
 class ControlUnit:
-    mcAdr = None
+    mc_adr = None
     datapath = None
     tick = None
     instraction_count = None
+    signal_handlers: ClassVar[dict] = {}
 
     def __init__(self, datapath):
-        self.mcAdr = 0
+        self.mc_adr = 0
         self.datapath = datapath
         self.tick = 0
         self.instraction_count = 0
+        self.signal_handlers = {
+            ARLatch: [getattr(self.datapath, "address_register_latch"), 2],
+            MEMSignal: [getattr(self.datapath, "memory_latch"), 2],
+            MCAdrLatch: [getattr(self, "mc_adr_latch"), 2],
+            IRLatch: [getattr(self.datapath, "mem_value_to_ir"), 1],
+            ALUValues: [getattr(self.datapath, "alu_values_get"), 1],
+            AluLatch: [getattr(self.datapath, "alu_latch"), 2],
+            TosLatch: [getattr(self.datapath, "tos_latch"), 2],
+            PCLatch: [getattr(self.datapath, "pc_latch"), 2],
+            DSLatch: [getattr(self.datapath, "data_stack_latch"), 2],
+            BRLatch: [getattr(self.datapath, "write_buffer_register"), 1],
+            IOLatch: [getattr(self.datapath, "io_latch"), 2],
+            JUMPS: [getattr(self.datapath, "jump"), 2],
+            Instraction: [getattr(self, "inc_instraction_count"), 1]
+        }
 
     def __repr__(self, signal):
-        state_repr = (
+        return (
             "TICK: {:4} PC: {:3} ADDR: {:3} mcADDR: {:2} SIGNAL: {:15} TOS: {:6} Z: {:1} N: {:1} V: {:1}\n" "DS: {}"
         ).format(
             str(self.tick),
             str(self.datapath.pc),
             str(self.datapath.address_register),
-            str(self.mcAdr),
+            str(self.mc_adr),
             str(signal),
             str(self.datapath.top_of_stack) if self.datapath.top_of_stack is not None else "0",
             str(self.datapath.alu.z_flag),
@@ -138,65 +171,47 @@ class ControlUnit:
             str(self.datapath.alu.v_flag),
             self.datapath.data_stack.stack,
         )
-        return state_repr
 
     def inc_tick(self):
         self.tick += 1
 
+    def inc_instraction_count(self):
+        self.instraction_count += 1
+
     def execute_instraction(self, signals):
         for signal in signals:
-            if isinstance(signal, ARLatch):
-                self.datapath.address_register_latch(signal)
-            elif isinstance(signal, MEMSignal):
-                self.datapath.memory_latch(signal)
-            elif isinstance(signal, MCAdrLatch):
-                self.mcAdr_latch(signal)
-            elif isinstance(signal, IRLatch):
-                self.datapath.mem_value_to_ir()
-            elif isinstance(signal, ALUValues):
-                self.datapath.alu_values_get()
-            elif isinstance(signal, AluLatch):
-                self.datapath.alu_latch(signal)
-            elif isinstance(signal, TosLatch):
-                self.datapath.tos_latch(signal)
-            elif isinstance(signal, PCLatch):
-                self.datapath.pc_latch(signal)
-            elif isinstance(signal, DSLatch):
-                self.datapath.data_stack_latch(signal)
-            elif isinstance(signal, BRLatch):
-                self.datapath.write_buffer_register()
-            elif isinstance(signal, IOLatch):
-                self.datapath.io_latch(signal)
-            elif isinstance(signal, JUMPS):
-                self.datapath.jump(signal)
-            elif isinstance(signal, Instraction):
-                self.instraction_count += 1
-            elif isinstance(signal, PROG):
-                raise StopIteration
+            handler_name = self.signal_handlers.get(type(signal))
+            if handler_name:
+                if handler_name[1] == 2:
+                    handler_name[0](signal)
+                else:
+                    handler_name[0]()
             else:
+                if isinstance(signal, PROG):
+                    raise StopIteration
                 raise InvalidSignalError(signal)
             logging.debug("%s", self.__repr__(signal))
             self.inc_tick()
 
-    def mcAdr_latch(self, signal):
+    def mc_adr_latch(self, signal):
         match signal:
             case MCAdrLatch.IR:
-                self.mcAdr = opcode2microcode(self.datapath.instraction_register["opcode"])
+                self.mc_adr = opcode2microcode(self.datapath.instraction_register["opcode"])
             case MCAdrLatch.INC:
-                self.mcAdr += 1
+                self.mc_adr += 1
             case MCAdrLatch.ZERO:
-                self.mcAdr = 0
+                self.mc_adr = 0
 
     def run_machine(self):
         try:
             while self.instraction_count < INSTRACTION_LIMIT:
-                self.execute_instraction(microcode[self.mcAdr])
+                self.execute_instraction(microcode[self.mc_adr])
         except StopIteration:
             pass
-        except IOError:
+        except OSError:
             pass
         output = ""
         for stroka in "".join(self.datapath.output_buffer).split("\n"):
-            output += f'{4 * '\t'}{stroka}\n'
+            output += f"{4 * '\t'}{stroka}\n"
         logging.debug("output_buffer: \n" + output[0:-1])
         return self.datapath.output_buffer, self.instraction_count, self.tick

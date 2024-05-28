@@ -1,7 +1,18 @@
 import sys
 
+from exceptions import (
+    BranchesNotBalancedError,
+    EndingProcedureBeforeClosingBranchError,
+    EndingProcedureBeforeClosingLoopError,
+    EndingProcedureError,
+    InvalidInputError,
+    LoopNotBalancedError,
+    NestedProcedureCreationError,
+    StartedProcedureInBranchError,
+    StartedProcedureInLoopError,
+    WrongTranslatorArgumentsError,
+)
 from isa import Opcode, Term, write_code
-from exceptions import *
 
 commands = {
     "+",
@@ -38,9 +49,10 @@ vars_count = []
 def is_number(maybe_number):
     try:
         int(maybe_number)
-        return True
     except ValueError:
         return False
+    else:
+        return True
 
 
 def symbol2opcode(symbol):
