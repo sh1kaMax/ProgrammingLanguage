@@ -153,7 +153,7 @@ class ControlUnit:
             BRLatch: [getattr(self.datapath, "write_buffer_register"), 1],
             IOLatch: [getattr(self.datapath, "io_latch"), 2],
             JUMPS: [getattr(self.datapath, "jump"), 2],
-            Instraction: [getattr(self, "inc_instraction_count"), 1]
+            Instraction: [getattr(self, "inc_instraction_count"), 1],
         }
 
     def __repr__(self, signal):
