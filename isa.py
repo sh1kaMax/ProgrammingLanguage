@@ -49,10 +49,10 @@ def write_code(filename, code):
 
 def read_code(filename):
     with open(filename, encoding="utf-8") as file:
-        code = json.loads(file.read())\
-
+        code = json.loads(file.read())
     for instraction in code:
-        instraction["opcode"] = Opcode(instraction["opcode"])
+        if "opcode" in instraction:
+            instraction["opcode"] = Opcode(instraction["opcode"])
 
         if "term" in instraction:
             instraction["term"] = Term(instraction["term"][0], instraction["term"][1], instraction["term"][2])

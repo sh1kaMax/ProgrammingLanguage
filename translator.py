@@ -38,6 +38,7 @@ loop_branch_commands = {
 }
 
 variable_names = {}
+vars_count = []
 
 
 def is_number(maybe_number):
@@ -125,6 +126,7 @@ def text2terms(text):
                     if line_words[word_number] == '!' or line_words[word_number] == '@':
                         if word not in variable_names:
                             variable_names[word] = var_counter
+                            vars_count.append(word)
                             var_counter += 1
                         if is_procedure:
                             procedures[procedure_name].append(Term(line_number, word_number, word))
@@ -152,33 +154,8 @@ def text2terms(text):
     return terms
 
 
-def translate_string(str, count, line_number):
+def translate_string(str, count):
     massive = []
-    next_skip = False
-    string_len = len(str) - str.count("\\n")
-    string_adr = variable_names[str]
-    massive.append({"index": count, "opcode": Opcode.PUSH.value, "arg": string_len})
-    count += 1
-    massive.append(({"index": count, "opcode": Opcode.ADDR_ON_TOP.value, "arg": string_adr}))
-    string_adr += 1
-    count += 1
-    massive.append(({"index": count, "opcode": Opcode.SAVE_VAR.value}))
-    count += 1
-    for symbol_number, symbol in enumerate(str, 0):
-        if symbol == '\\':
-            symbol = '\n'
-        if not next_skip:
-            massive.append({"index": count, "opcode": Opcode.PUSH.value, "arg": ord(symbol), "term": Term(line_number, symbol_number, symbol)})
-            count += 1
-            massive.append({"index": count, "opcode": Opcode.ADDR_ON_TOP.value, "arg": string_adr})
-            string_adr += 1
-            count += 1
-            massive.append({"index": count, "opcode": Opcode.SAVE_VAR.value})
-            count += 1
-            if symbol == '\n':
-                next_skip = True
-        else:
-            next_skip = False
     massive.append({"index": count, "opcode": Opcode.ADDR_ON_TOP.value, "arg": variable_names[str]})
     count += 1
     jmp_index = count
@@ -217,7 +194,16 @@ def translate_string(str, count, line_number):
     return massive, count
 
 
+def add_string_in_memory(str):
+    massive = []
+    stroka = str.replace("\\n", "\n")
+    massive.append({"adr": variable_names[str], "arg": len(stroka)})
+    for symbol_number, symbol in enumerate(stroka, 1):
+        massive.append({"adr": variable_names[str] + symbol_number, "arg": ord(symbol)})
+    return massive
+
 def translate(text):
+    strings = []
     terms = text2terms(text)
     machine_code = []
     jmp_stack = []
@@ -252,13 +238,22 @@ def translate(text):
         elif words[0] in variable_names:
             machine_code.append({"index": count, "opcode": Opcode.ADDR_ON_TOP.value, "arg": variable_names[words[0]], "term": term})
         elif words[0] == ".\"":
-            massive, plus_count = translate_string(str(' '.join(words)[3:-1]), count, term.line)
+            strings.append(str(' '.join(words)[3:-1]))
+            massive, plus_count = translate_string(str(' '.join(words)[3:-1]), count)
             count = plus_count - 1
             for i in massive:
                 machine_code.append(i)
         else:
             machine_code.append({"index": count, "opcode": symbol2opcode(words[0]), "term": term})
         count += 1
+    for var in vars_count:
+        machine_code.append({"index": count, "arg": 0})
+        count += 1
+    for words in strings:
+        words = words.replace("\\n", "\n")
+        machine_code.append({"index": count, "arg": len(words)})
+        for symbol_line, symbol in enumerate(words, 1):
+            machine_code.append({"index": count + symbol_line, "arg": ord(symbol)})
     return machine_code
 
 
@@ -269,13 +264,12 @@ def main(source, target):
     code = translate(source)
 
     write_code(target, code)
+    variable_names.clear()
     print(f'Translated successfully. Source LoC: {len(source.split("\n"))} Code instruction: {len(code)}')
 
 
 if __name__ == "__main__":
-    # if len(sys.argv) != 3:
-    #     raise WrongTranslatorArgumentsError
-    # _, input_file, output_file = sys.argv
-    input_file = "./programs/test"
-    output_file = "./programs/test_machine_code"
+    if len(sys.argv) != 3:
+        raise WrongTranslatorArgumentsError
+    _, input_file, output_file = sys.argv
     main(input_file, output_file)

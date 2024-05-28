@@ -12,11 +12,12 @@ class Stack:
     def push(self, arg):
         if len(self.stack) == self.max_size:
             raise StackOverflowError(self.max_size)
-        self.stack.append(arg)
+        if arg is not None:
+            self.stack.append(arg)
 
     def pop(self):
         if len(self.stack) == 0:
-            raise StackUnderflowError()
+            return None
         value = self.stack[-1]
         self.stack.pop()
         return value

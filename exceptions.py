@@ -50,7 +50,7 @@ class WrongTranslatorArgumentsError(Exception):
 
 class WrongMachineArguments(Exception):
     def __init__(self):
-        super().__init__(f'Error: wrong number of arguments (machine.py <machine_code_file> <input_file>')
+        super().__init__(f'Error: wrong number of arguments (machine.py <machine_code_file> <input_file> <log_file>')
 
 
 class StackOverflowError(Exception):

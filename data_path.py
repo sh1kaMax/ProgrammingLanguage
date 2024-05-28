@@ -1,24 +1,25 @@
+import logging
+
 from data_stack import Stack
 from signals import *
 from alu import ALU
 STACK_SIZE = 64
 SIZE_FOR_VARS = 150
-INSTRACTION_LIMIT = 2500
+INSTRACTION_LIMIT = 100000
 
 
 class Memory:
     memory = None
-    start_of_program = None
     start_of_variables = None
     value = None
 
-    def __init__(self, code):
-        self.start_of_program = SIZE_FOR_VARS + 1
-        self.memory = [0] * (len(code) + SIZE_FOR_VARS + 1)
+    def __init__(self, code, start_of_variables):
+        self.start_of_variables = start_of_variables
+        self.memory = [0] * (len(code) + 1)
         self.value = 0
-        for number, instraction in enumerate(code, 0):
-            self.memory[self.start_of_program + number] = instraction
-        self.memory[0] = self.start_of_program
+        self.memory[0] = start_of_variables
+        for number, instraction in enumerate(code, 1):
+            self.memory[number] = instraction
 
     def read(self, adr):
         self.value = self.memory[adr]
@@ -39,13 +40,13 @@ class DataPath:
     input_buffer = None
     output_buffer = None
 
-    def __init__(self, code, input_token):
+    def __init__(self, code, input_token, start_of_variables):
         self.data_stack = Stack(STACK_SIZE)
         self.alu = ALU()
         self.instraction_register: map = {}
         self.buffer_register = 0
-        self.memory = Memory(code)
-        self.pc = self.memory.start_of_program
+        self.memory = Memory(code, start_of_variables)
+        self.pc = 1
         self.input_buffer = input_token
         self.output_buffer = []
 
@@ -68,12 +69,14 @@ class DataPath:
         match signal:
             case TosLatch.ALU:
                 self.top_of_stack = self.alu.value
-            case TosLatch.BufferRegister:
+            case TosLatch.BR:
                 self.top_of_stack = self.buffer_register
             case TosLatch.MEM:
                 self.top_of_stack = self.memory[self.address_register]
             case TosLatch.IR:
                 self.top_of_stack = int(self.instraction_register["arg"])
+            case TosLatch.IR_VAR:
+                self.top_of_stack = int(self.instraction_register["arg"]) + self.memory.start_of_variables
 
     def pc_latch(self, signal):
         match signal:
@@ -116,35 +119,39 @@ class DataPath:
 
     def data_stack_latch(self, signal):
         match signal:
-            case DataStackSignals.Push:
+            case DSLatch.Push:
                 self.push_value()
-            case DataStackSignals.Pop:
+            case DSLatch.Pop:
                 self.pop_value()
 
     def memory_latch(self, signal):
         match signal:
-            case MemorySignal.MemRead:
+            case MEMSignal.READ:
                 self.memory.read(self.address_register)
-            case MemorySignal.MemWrite:
+            case MEMSignal.WRITE:
                 self.memory.write(self.address_register)
-            case MemorySignal.TOS:
+            case MEMSignal.TOS:
                 self.memory.value = self.top_of_stack
 
     def io_latch(self, signal):
         match signal:
             case IOLatch.PRINT:
                 self.output_buffer.append(str(self.top_of_stack))
+                logging.debug("output: " + ''.join(self.output_buffer) + "<<" + str(self.top_of_stack))
             case IOLatch.READ:
                 if len(self.input_buffer) == 0:
+                    logging.warning("No input from user!")
                     raise IOError()
                 self.top_of_stack = ord(self.input_buffer.pop(0))
+                logging.debug("input: " + chr(self.top_of_stack))
             case IOLatch.EMIT:
                 self.output_buffer.append(chr(self.top_of_stack))
+                logging.debug("output: " + ''.join(self.output_buffer) + "<<" + chr(self.top_of_stack))
 
     def jump(self, signal):
         match signal:
             case JUMPS.JZS:
                 if self.alu.z_flag == 1:
-                    self.pc = self.top_of_stack + self.memory.start_of_program - 1
+                    self.pc = self.top_of_stack
             case JUMPS.JMP:
                 self.pc = self.top_of_stack

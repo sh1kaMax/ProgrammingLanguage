@@ -1,7 +1,7 @@
 from enum import Enum
 
 
-class DataStackSignals(Enum):
+class DSLatch(Enum):
     Push = 0
     Pop = 1
 
@@ -23,12 +23,13 @@ class PCLatch(Enum):
 class TosLatch(Enum):
     MEM = 0
     IR = 1
-    BufferRegister = 2
+    BR = 2
     ALU = 3
+    IR_VAR = 4
 
 
-class ValueToALULatch(Enum):
-    GetValues = 0
+class ALUValues(Enum):
+    VAR = 0
 
 
 class AluLatch(Enum):
@@ -43,9 +44,9 @@ class AluLatch(Enum):
     LESS = 8
 
 
-class MemorySignal(Enum):
-    MemRead = 0
-    MemWrite = 1
+class MEMSignal(Enum):
+    READ = 0
+    WRITE = 1
     TOS = 2
 
 
@@ -78,3 +79,7 @@ class IOLatch(Enum):
 
 class PROG(Enum):
     HALT = 0
+
+
+class Instraction(Enum):
+    INC = 0

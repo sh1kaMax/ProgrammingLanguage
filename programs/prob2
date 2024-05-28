@@ -1,0 +1,34 @@
+: fib
+    odd @
+    even @
+    +
+    dup
+    odd !
+    even @
+    +
+    dup
+    dup
+    even !
+    maximum @
+    <
+    if
+        sum @
+        + sum !
+    endif
+;
+
+1 odd !
+2 even !
+2 sum !
+4000000 maximum !
+
+begin
+    fib
+    even @
+    maximum @
+    >
+until
+
+sum @
+.
+exit
