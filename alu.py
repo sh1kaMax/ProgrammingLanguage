@@ -1,5 +1,3 @@
-from isa import Opcode
-
 ALU_COMMANDS = [
     # SUM - 0
     lambda x, y: x + y,

@@ -43,7 +43,7 @@ class DataPath:
     def __init__(self, code, input_token, start_of_variables):
         self.data_stack = Stack(STACK_SIZE)
         self.alu = ALU()
-        self.instraction_register: map = {}
+        self.instraction_register = {}
         self.buffer_register = 0
         self.memory = Memory(code, start_of_variables)
         self.pc = 1
@@ -72,7 +72,7 @@ class DataPath:
             case TosLatch.BR:
                 self.top_of_stack = self.buffer_register
             case TosLatch.MEM:
-                self.top_of_stack = self.memory[self.address_register]
+                self.top_of_stack = self.memory.memory[self.address_register]
             case TosLatch.IR:
                 self.top_of_stack = int(self.instraction_register["arg"])
             case TosLatch.IR_VAR:

@@ -154,9 +154,8 @@ def text2terms(text):
     return terms
 
 
-def translate_string(str, count):
-    massive = []
-    massive.append({"index": count, "opcode": Opcode.ADDR_ON_TOP.value, "arg": variable_names[str]})
+def translate_string(stroka, count):
+    massive = [{"index": count, "opcode": Opcode.ADDR_ON_TOP.value, "arg": variable_names[stroka]}]
     count += 1
     jmp_index = count
     massive.append({"index": count, "opcode": Opcode.PUSH.value, "arg": 1})
@@ -171,13 +170,13 @@ def translate_string(str, count):
     count += 1
     massive.append({"index": count, "opcode": Opcode.DUP.value})
     count += 1
-    massive.append({"index": count, "opcode": Opcode.ADDR_ON_TOP.value, "arg": variable_names[str]})
+    massive.append({"index": count, "opcode": Opcode.ADDR_ON_TOP.value, "arg": variable_names[stroka]})
     count += 1
     massive.append({"index": count, "opcode": Opcode.SWAP.value})
     count += 1
     massive.append({"index": count, "opcode": Opcode.SUB.value})
     count += 1
-    massive.append({"index": count, "opcode": Opcode.ADDR_ON_TOP.value, "arg": variable_names[str]})
+    massive.append({"index": count, "opcode": Opcode.ADDR_ON_TOP.value, "arg": variable_names[stroka]})
     count += 1
     massive.append({"index": count, "opcode": Opcode.VAR_ON_TOP.value})
     count += 1
@@ -194,13 +193,14 @@ def translate_string(str, count):
     return massive, count
 
 
-def add_string_in_memory(str):
+def add_string_in_memory(str_in):
     massive = []
-    stroka = str.replace("\\n", "\n")
-    massive.append({"adr": variable_names[str], "arg": len(stroka)})
+    stroka = str_in.replace("\\n", "\n")
+    massive.append({"adr": variable_names[str_in], "arg": len(stroka)})
     for symbol_number, symbol in enumerate(stroka, 1):
-        massive.append({"adr": variable_names[str] + symbol_number, "arg": ord(symbol)})
+        massive.append({"adr": variable_names[str_in] + symbol_number, "arg": ord(symbol)})
     return massive
+
 
 def translate(text):
     strings = []
@@ -216,7 +216,8 @@ def translate(text):
             jmp_stack.append(count)
         elif words[0] == "else":
             if_index = jmp_stack.pop()
-            machine_code[if_index] = {"index": if_index, "opcode": Opcode.JZS.value, "arg": count + 1, "term": terms[if_index]}
+            machine_code[if_index] = {"index": if_index, "opcode": Opcode.JZS.value, "arg": count + 1,
+                                      "term": terms[if_index]}
             machine_code.append(None)
             jmp_stack.append(count)
             else_flag = True
@@ -236,7 +237,8 @@ def translate(text):
         elif is_number(words[0]):
             machine_code.append({"index": count, "opcode": Opcode.PUSH.value, "arg": words[0], "term": term})
         elif words[0] in variable_names:
-            machine_code.append({"index": count, "opcode": Opcode.ADDR_ON_TOP.value, "arg": variable_names[words[0]], "term": term})
+            machine_code.append(
+                {"index": count, "opcode": Opcode.ADDR_ON_TOP.value, "arg": variable_names[words[0]], "term": term})
         elif words[0] == ".\"":
             strings.append(str(' '.join(words)[3:-1]))
             massive, plus_count = translate_string(str(' '.join(words)[3:-1]), count)

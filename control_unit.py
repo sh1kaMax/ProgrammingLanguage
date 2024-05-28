@@ -142,7 +142,6 @@ class ControlUnit:
     def inc_tick(self):
         self.tick += 1
 
-
     def execute_instraction(self, signals):
         for signal in signals:
             if isinstance(signal, ARLatch):

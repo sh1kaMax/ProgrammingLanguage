@@ -25,7 +25,8 @@ class StartedProcedureInLoopError(Exception):
 
 class EndingProcedureBeforeClosingBranchError(Exception):
     def __init__(self, line_number, word_number, word):
-        super().__init__(f'Error: you need to close a branch before ending procedure [{line_number, word_number, word}]')
+        super().__init__(f'Error: you need to close a branch before ending procedure '
+                         f'[{line_number, word_number, word}]')
 
 
 class EndingProcedureBeforeClosingLoopError(Exception):
