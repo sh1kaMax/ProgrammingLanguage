@@ -142,9 +142,10 @@ class DataPath:
             case IOLatch.READ:
                 if len(self.input_buffer) == 0:
                     logging.warning("No input from user!")
-                    raise OSError()
-                self.top_of_stack = ord(self.input_buffer.pop(0))
-                logging.debug("input: " + chr(self.top_of_stack))
+                    self.top_of_stack = 0
+                else:
+                    self.top_of_stack = ord(self.input_buffer.pop(0))
+                    logging.debug("input: " + chr(self.top_of_stack))
             case IOLatch.EMIT:
                 self.output_buffer.append(chr(self.top_of_stack))
                 logging.debug("output: " + "".join(self.output_buffer) + "<<" + chr(self.top_of_stack))

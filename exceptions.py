@@ -68,3 +68,8 @@ class StackUnderflowError(Exception):
 class InvalidSignalError(Exception):
     def __init__(self, signal):
         super().__init__(f"Error: signal {signal} does not exist")
+
+
+class NewBufferInProcedureError(Exception):
+    def __init__(self):
+        super().__init__(f'Error: cannot make new buffer in procedure')

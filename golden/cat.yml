@@ -30,8 +30,8 @@ out_stdout: |-
   ============================================================
   ak lab3
   
-  instraction_count: 141
-  tick: 932
+  instraction_count: 160
+  tick: 1049
 out_log: |-
   [DEBUG]  TICK: 0    PC: 1   ADDR: 1   mcADDR: 0  SIGNAL: ARLatch.PC      TOS: 0      Z: 0 N: 0 V: 0
   DS: []
@@ -1912,5 +1912,239 @@ out_log: |-
   [DEBUG]  TICK: 931  PC: 1   ADDR: 1   mcADDR: 45 SIGNAL: MCAdrLatch.INC  TOS: 0      Z: 1 N: 0 V: 0
   DS: []
   [WARNING]  No input from user!
+  [DEBUG]  TICK: 932  PC: 1   ADDR: 1   mcADDR: 45 SIGNAL: IOLatch.READ    TOS: 0      Z: 1 N: 0 V: 0
+  DS: []
+  [DEBUG]  TICK: 933  PC: 1   ADDR: 1   mcADDR: 45 SIGNAL: Instraction.INC TOS: 0      Z: 1 N: 0 V: 0
+  DS: []
+  [DEBUG]  TICK: 934  PC: 2   ADDR: 1   mcADDR: 45 SIGNAL: PCLatch.INC     TOS: 0      Z: 1 N: 0 V: 0
+  DS: []
+  [DEBUG]  TICK: 935  PC: 2   ADDR: 1   mcADDR: 0  SIGNAL: MCAdrLatch.ZERO TOS: 0      Z: 1 N: 0 V: 0
+  DS: []
+  [DEBUG]  TICK: 936  PC: 2   ADDR: 2   mcADDR: 0  SIGNAL: ARLatch.PC      TOS: 0      Z: 1 N: 0 V: 0
+  DS: []
+  [DEBUG]  TICK: 937  PC: 2   ADDR: 2   mcADDR: 0  SIGNAL: MEMSignal.READ  TOS: 0      Z: 1 N: 0 V: 0
+  DS: []
+  [DEBUG]  TICK: 938  PC: 2   ADDR: 2   mcADDR: 1  SIGNAL: MCAdrLatch.INC  TOS: 0      Z: 1 N: 0 V: 0
+  DS: []
+  [DEBUG]  TICK: 939  PC: 2   ADDR: 2   mcADDR: 1  SIGNAL: IRLatch.MEM     TOS: 0      Z: 1 N: 0 V: 0
+  DS: []
+  [DEBUG]  TICK: 940  PC: 2   ADDR: 2   mcADDR: 1  SIGNAL: Instraction.INC TOS: 0      Z: 1 N: 0 V: 0
+  DS: []
+  [DEBUG]  TICK: 941  PC: 2   ADDR: 2   mcADDR: 12 SIGNAL: MCAdrLatch.IR   TOS: 0      Z: 1 N: 0 V: 0
+  DS: []
+  [DEBUG]  TICK: 942  PC: 2   ADDR: 2   mcADDR: 12 SIGNAL: DSLatch.Push    TOS: 0      Z: 1 N: 0 V: 0
+  DS: [0]
+  [DEBUG]  TICK: 943  PC: 2   ADDR: 2   mcADDR: 13 SIGNAL: MCAdrLatch.INC  TOS: 0      Z: 1 N: 0 V: 0
+  DS: [0]
+  [DEBUG]  TICK: 944  PC: 3   ADDR: 2   mcADDR: 13 SIGNAL: PCLatch.INC     TOS: 0      Z: 1 N: 0 V: 0
+  DS: [0]
+  [DEBUG]  TICK: 945  PC: 3   ADDR: 2   mcADDR: 13 SIGNAL: Instraction.INC TOS: 0      Z: 1 N: 0 V: 0
+  DS: [0]
+  [DEBUG]  TICK: 946  PC: 3   ADDR: 2   mcADDR: 0  SIGNAL: MCAdrLatch.ZERO TOS: 0      Z: 1 N: 0 V: 0
+  DS: [0]
+  [DEBUG]  TICK: 947  PC: 3   ADDR: 3   mcADDR: 0  SIGNAL: ARLatch.PC      TOS: 0      Z: 1 N: 0 V: 0
+  DS: [0]
+  [DEBUG]  TICK: 948  PC: 3   ADDR: 3   mcADDR: 0  SIGNAL: MEMSignal.READ  TOS: 0      Z: 1 N: 0 V: 0
+  DS: [0]
+  [DEBUG]  TICK: 949  PC: 3   ADDR: 3   mcADDR: 1  SIGNAL: MCAdrLatch.INC  TOS: 0      Z: 1 N: 0 V: 0
+  DS: [0]
+  [DEBUG]  TICK: 950  PC: 3   ADDR: 3   mcADDR: 1  SIGNAL: IRLatch.MEM     TOS: 0      Z: 1 N: 0 V: 0
+  DS: [0]
+  [DEBUG]  TICK: 951  PC: 3   ADDR: 3   mcADDR: 1  SIGNAL: Instraction.INC TOS: 0      Z: 1 N: 0 V: 0
+  DS: [0]
+  [DEBUG]  TICK: 952  PC: 3   ADDR: 3   mcADDR: 12 SIGNAL: MCAdrLatch.IR   TOS: 0      Z: 1 N: 0 V: 0
+  DS: [0]
+  [DEBUG]  TICK: 953  PC: 3   ADDR: 3   mcADDR: 12 SIGNAL: DSLatch.Push    TOS: 0      Z: 1 N: 0 V: 0
+  DS: [0, 0]
+  [DEBUG]  TICK: 954  PC: 3   ADDR: 3   mcADDR: 13 SIGNAL: MCAdrLatch.INC  TOS: 0      Z: 1 N: 0 V: 0
+  DS: [0, 0]
+  [DEBUG]  TICK: 955  PC: 4   ADDR: 3   mcADDR: 13 SIGNAL: PCLatch.INC     TOS: 0      Z: 1 N: 0 V: 0
+  DS: [0, 0]
+  [DEBUG]  TICK: 956  PC: 4   ADDR: 3   mcADDR: 13 SIGNAL: Instraction.INC TOS: 0      Z: 1 N: 0 V: 0
+  DS: [0, 0]
+  [DEBUG]  TICK: 957  PC: 4   ADDR: 3   mcADDR: 0  SIGNAL: MCAdrLatch.ZERO TOS: 0      Z: 1 N: 0 V: 0
+  DS: [0, 0]
+  [DEBUG]  TICK: 958  PC: 4   ADDR: 4   mcADDR: 0  SIGNAL: ARLatch.PC      TOS: 0      Z: 1 N: 0 V: 0
+  DS: [0, 0]
+  [DEBUG]  TICK: 959  PC: 4   ADDR: 4   mcADDR: 0  SIGNAL: MEMSignal.READ  TOS: 0      Z: 1 N: 0 V: 0
+  DS: [0, 0]
+  [DEBUG]  TICK: 960  PC: 4   ADDR: 4   mcADDR: 1  SIGNAL: MCAdrLatch.INC  TOS: 0      Z: 1 N: 0 V: 0
+  DS: [0, 0]
+  [DEBUG]  TICK: 961  PC: 4   ADDR: 4   mcADDR: 1  SIGNAL: IRLatch.MEM     TOS: 0      Z: 1 N: 0 V: 0
+  DS: [0, 0]
+  [DEBUG]  TICK: 962  PC: 4   ADDR: 4   mcADDR: 1  SIGNAL: Instraction.INC TOS: 0      Z: 1 N: 0 V: 0
+  DS: [0, 0]
+  [DEBUG]  TICK: 963  PC: 4   ADDR: 4   mcADDR: 25 SIGNAL: MCAdrLatch.IR   TOS: 0      Z: 1 N: 0 V: 0
+  DS: [0, 0]
+  [DEBUG]  TICK: 964  PC: 4   ADDR: 4   mcADDR: 25 SIGNAL: DSLatch.Push    TOS: 0      Z: 1 N: 0 V: 0
+  DS: [0, 0, 0]
+  [DEBUG]  TICK: 965  PC: 4   ADDR: 4   mcADDR: 25 SIGNAL: TosLatch.IR     TOS: 0      Z: 1 N: 0 V: 0
+  DS: [0, 0, 0]
+  [DEBUG]  TICK: 966  PC: 4   ADDR: 4   mcADDR: 26 SIGNAL: MCAdrLatch.INC  TOS: 0      Z: 1 N: 0 V: 0
+  DS: [0, 0, 0]
+  [DEBUG]  TICK: 967  PC: 5   ADDR: 4   mcADDR: 26 SIGNAL: PCLatch.INC     TOS: 0      Z: 1 N: 0 V: 0
+  DS: [0, 0, 0]
+  [DEBUG]  TICK: 968  PC: 5   ADDR: 4   mcADDR: 26 SIGNAL: Instraction.INC TOS: 0      Z: 1 N: 0 V: 0
+  DS: [0, 0, 0]
+  [DEBUG]  TICK: 969  PC: 5   ADDR: 4   mcADDR: 0  SIGNAL: MCAdrLatch.ZERO TOS: 0      Z: 1 N: 0 V: 0
+  DS: [0, 0, 0]
+  [DEBUG]  TICK: 970  PC: 5   ADDR: 5   mcADDR: 0  SIGNAL: ARLatch.PC      TOS: 0      Z: 1 N: 0 V: 0
+  DS: [0, 0, 0]
+  [DEBUG]  TICK: 971  PC: 5   ADDR: 5   mcADDR: 0  SIGNAL: MEMSignal.READ  TOS: 0      Z: 1 N: 0 V: 0
+  DS: [0, 0, 0]
+  [DEBUG]  TICK: 972  PC: 5   ADDR: 5   mcADDR: 1  SIGNAL: MCAdrLatch.INC  TOS: 0      Z: 1 N: 0 V: 0
+  DS: [0, 0, 0]
+  [DEBUG]  TICK: 973  PC: 5   ADDR: 5   mcADDR: 1  SIGNAL: IRLatch.MEM     TOS: 0      Z: 1 N: 0 V: 0
+  DS: [0, 0, 0]
+  [DEBUG]  TICK: 974  PC: 5   ADDR: 5   mcADDR: 1  SIGNAL: Instraction.INC TOS: 0      Z: 1 N: 0 V: 0
+  DS: [0, 0, 0]
+  [DEBUG]  TICK: 975  PC: 5   ADDR: 5   mcADDR: 50 SIGNAL: MCAdrLatch.IR   TOS: 0      Z: 1 N: 0 V: 0
+  DS: [0, 0, 0]
+  [DEBUG]  TICK: 976  PC: 5   ADDR: 5   mcADDR: 50 SIGNAL: ALUValues.VAR   TOS: 0      Z: 1 N: 0 V: 0
+  DS: [0, 0]
+  [DEBUG]  TICK: 977  PC: 5   ADDR: 5   mcADDR: 50 SIGNAL: AluLatch.NOT_EQ TOS: 0      Z: 1 N: 0 V: 0
+  DS: [0, 0]
+  [DEBUG]  TICK: 978  PC: 5   ADDR: 5   mcADDR: 51 SIGNAL: MCAdrLatch.INC  TOS: 0      Z: 1 N: 0 V: 0
+  DS: [0, 0]
+  [DEBUG]  TICK: 979  PC: 5   ADDR: 5   mcADDR: 51 SIGNAL: TosLatch.ALU    TOS: 0      Z: 1 N: 0 V: 0
+  DS: [0, 0]
+  [DEBUG]  TICK: 980  PC: 6   ADDR: 5   mcADDR: 51 SIGNAL: PCLatch.INC     TOS: 0      Z: 1 N: 0 V: 0
+  DS: [0, 0]
+  [DEBUG]  TICK: 981  PC: 6   ADDR: 5   mcADDR: 51 SIGNAL: Instraction.INC TOS: 0      Z: 1 N: 0 V: 0
+  DS: [0, 0]
+  [DEBUG]  TICK: 982  PC: 6   ADDR: 5   mcADDR: 0  SIGNAL: MCAdrLatch.ZERO TOS: 0      Z: 1 N: 0 V: 0
+  DS: [0, 0]
+  [DEBUG]  TICK: 983  PC: 6   ADDR: 6   mcADDR: 0  SIGNAL: ARLatch.PC      TOS: 0      Z: 1 N: 0 V: 0
+  DS: [0, 0]
+  [DEBUG]  TICK: 984  PC: 6   ADDR: 6   mcADDR: 0  SIGNAL: MEMSignal.READ  TOS: 0      Z: 1 N: 0 V: 0
+  DS: [0, 0]
+  [DEBUG]  TICK: 985  PC: 6   ADDR: 6   mcADDR: 1  SIGNAL: MCAdrLatch.INC  TOS: 0      Z: 1 N: 0 V: 0
+  DS: [0, 0]
+  [DEBUG]  TICK: 986  PC: 6   ADDR: 6   mcADDR: 1  SIGNAL: IRLatch.MEM     TOS: 0      Z: 1 N: 0 V: 0
+  DS: [0, 0]
+  [DEBUG]  TICK: 987  PC: 6   ADDR: 6   mcADDR: 1  SIGNAL: Instraction.INC TOS: 0      Z: 1 N: 0 V: 0
+  DS: [0, 0]
+  [DEBUG]  TICK: 988  PC: 6   ADDR: 6   mcADDR: 35 SIGNAL: MCAdrLatch.IR   TOS: 0      Z: 1 N: 0 V: 0
+  DS: [0, 0]
+  [DEBUG]  TICK: 989  PC: 6   ADDR: 6   mcADDR: 35 SIGNAL: DSLatch.Push    TOS: 0      Z: 1 N: 0 V: 0
+  DS: [0, 0, 0]
+  [DEBUG]  TICK: 990  PC: 6   ADDR: 6   mcADDR: 35 SIGNAL: TosLatch.IR     TOS: 7      Z: 1 N: 0 V: 0
+  DS: [0, 0, 0]
+  [DEBUG]  TICK: 991  PC: 7   ADDR: 6   mcADDR: 35 SIGNAL: JUMPS.JZS       TOS: 7      Z: 1 N: 0 V: 0
+  DS: [0, 0, 0]
+  [DEBUG]  TICK: 992  PC: 7   ADDR: 6   mcADDR: 36 SIGNAL: MCAdrLatch.INC  TOS: 7      Z: 1 N: 0 V: 0
+  DS: [0, 0, 0]
+  [DEBUG]  TICK: 993  PC: 7   ADDR: 6   mcADDR: 36 SIGNAL: DSLatch.Pop     TOS: 7      Z: 1 N: 0 V: 0
+  DS: [0, 0]
+  [DEBUG]  TICK: 994  PC: 7   ADDR: 6   mcADDR: 36 SIGNAL: BRLatch.DS      TOS: 7      Z: 1 N: 0 V: 0
+  DS: [0]
+  [DEBUG]  TICK: 995  PC: 7   ADDR: 6   mcADDR: 36 SIGNAL: TosLatch.BR     TOS: 0      Z: 1 N: 0 V: 0
+  DS: [0]
+  [DEBUG]  TICK: 996  PC: 7   ADDR: 6   mcADDR: 37 SIGNAL: MCAdrLatch.INC  TOS: 0      Z: 1 N: 0 V: 0
+  DS: [0]
+  [DEBUG]  TICK: 997  PC: 8   ADDR: 6   mcADDR: 37 SIGNAL: PCLatch.INC     TOS: 0      Z: 1 N: 0 V: 0
+  DS: [0]
+  [DEBUG]  TICK: 998  PC: 8   ADDR: 6   mcADDR: 37 SIGNAL: Instraction.INC TOS: 0      Z: 1 N: 0 V: 0
+  DS: [0]
+  [DEBUG]  TICK: 999  PC: 8   ADDR: 6   mcADDR: 0  SIGNAL: MCAdrLatch.ZERO TOS: 0      Z: 1 N: 0 V: 0
+  DS: [0]
+  [DEBUG]  TICK: 1000 PC: 8   ADDR: 8   mcADDR: 0  SIGNAL: ARLatch.PC      TOS: 0      Z: 1 N: 0 V: 0
+  DS: [0]
+  [DEBUG]  TICK: 1001 PC: 8   ADDR: 8   mcADDR: 0  SIGNAL: MEMSignal.READ  TOS: 0      Z: 1 N: 0 V: 0
+  DS: [0]
+  [DEBUG]  TICK: 1002 PC: 8   ADDR: 8   mcADDR: 1  SIGNAL: MCAdrLatch.INC  TOS: 0      Z: 1 N: 0 V: 0
+  DS: [0]
+  [DEBUG]  TICK: 1003 PC: 8   ADDR: 8   mcADDR: 1  SIGNAL: IRLatch.MEM     TOS: 0      Z: 1 N: 0 V: 0
+  DS: [0]
+  [DEBUG]  TICK: 1004 PC: 8   ADDR: 8   mcADDR: 1  SIGNAL: Instraction.INC TOS: 0      Z: 1 N: 0 V: 0
+  DS: [0]
+  [DEBUG]  TICK: 1005 PC: 8   ADDR: 8   mcADDR: 25 SIGNAL: MCAdrLatch.IR   TOS: 0      Z: 1 N: 0 V: 0
+  DS: [0]
+  [DEBUG]  TICK: 1006 PC: 8   ADDR: 8   mcADDR: 25 SIGNAL: DSLatch.Push    TOS: 0      Z: 1 N: 0 V: 0
+  DS: [0, 0]
+  [DEBUG]  TICK: 1007 PC: 8   ADDR: 8   mcADDR: 25 SIGNAL: TosLatch.IR     TOS: 0      Z: 1 N: 0 V: 0
+  DS: [0, 0]
+  [DEBUG]  TICK: 1008 PC: 8   ADDR: 8   mcADDR: 26 SIGNAL: MCAdrLatch.INC  TOS: 0      Z: 1 N: 0 V: 0
+  DS: [0, 0]
+  [DEBUG]  TICK: 1009 PC: 9   ADDR: 8   mcADDR: 26 SIGNAL: PCLatch.INC     TOS: 0      Z: 1 N: 0 V: 0
+  DS: [0, 0]
+  [DEBUG]  TICK: 1010 PC: 9   ADDR: 8   mcADDR: 26 SIGNAL: Instraction.INC TOS: 0      Z: 1 N: 0 V: 0
+  DS: [0, 0]
+  [DEBUG]  TICK: 1011 PC: 9   ADDR: 8   mcADDR: 0  SIGNAL: MCAdrLatch.ZERO TOS: 0      Z: 1 N: 0 V: 0
+  DS: [0, 0]
+  [DEBUG]  TICK: 1012 PC: 9   ADDR: 9   mcADDR: 0  SIGNAL: ARLatch.PC      TOS: 0      Z: 1 N: 0 V: 0
+  DS: [0, 0]
+  [DEBUG]  TICK: 1013 PC: 9   ADDR: 9   mcADDR: 0  SIGNAL: MEMSignal.READ  TOS: 0      Z: 1 N: 0 V: 0
+  DS: [0, 0]
+  [DEBUG]  TICK: 1014 PC: 9   ADDR: 9   mcADDR: 1  SIGNAL: MCAdrLatch.INC  TOS: 0      Z: 1 N: 0 V: 0
+  DS: [0, 0]
+  [DEBUG]  TICK: 1015 PC: 9   ADDR: 9   mcADDR: 1  SIGNAL: IRLatch.MEM     TOS: 0      Z: 1 N: 0 V: 0
+  DS: [0, 0]
+  [DEBUG]  TICK: 1016 PC: 9   ADDR: 9   mcADDR: 1  SIGNAL: Instraction.INC TOS: 0      Z: 1 N: 0 V: 0
+  DS: [0, 0]
+  [DEBUG]  TICK: 1017 PC: 9   ADDR: 9   mcADDR: 19 SIGNAL: MCAdrLatch.IR   TOS: 0      Z: 1 N: 0 V: 0
+  DS: [0, 0]
+  [DEBUG]  TICK: 1018 PC: 9   ADDR: 9   mcADDR: 19 SIGNAL: ALUValues.VAR   TOS: 0      Z: 1 N: 0 V: 0
+  DS: [0]
+  [DEBUG]  TICK: 1019 PC: 9   ADDR: 9   mcADDR: 19 SIGNAL: AluLatch.EQ     TOS: 0      Z: 0 N: 0 V: 0
+  DS: [0]
+  [DEBUG]  TICK: 1020 PC: 9   ADDR: 9   mcADDR: 20 SIGNAL: MCAdrLatch.INC  TOS: 0      Z: 0 N: 0 V: 0
+  DS: [0]
+  [DEBUG]  TICK: 1021 PC: 9   ADDR: 9   mcADDR: 20 SIGNAL: TosLatch.ALU    TOS: 1      Z: 0 N: 0 V: 0
+  DS: [0]
+  [DEBUG]  TICK: 1022 PC: 10  ADDR: 9   mcADDR: 20 SIGNAL: PCLatch.INC     TOS: 1      Z: 0 N: 0 V: 0
+  DS: [0]
+  [DEBUG]  TICK: 1023 PC: 10  ADDR: 9   mcADDR: 20 SIGNAL: Instraction.INC TOS: 1      Z: 0 N: 0 V: 0
+  DS: [0]
+  [DEBUG]  TICK: 1024 PC: 10  ADDR: 9   mcADDR: 0  SIGNAL: MCAdrLatch.ZERO TOS: 1      Z: 0 N: 0 V: 0
+  DS: [0]
+  [DEBUG]  TICK: 1025 PC: 10  ADDR: 10  mcADDR: 0  SIGNAL: ARLatch.PC      TOS: 1      Z: 0 N: 0 V: 0
+  DS: [0]
+  [DEBUG]  TICK: 1026 PC: 10  ADDR: 10  mcADDR: 0  SIGNAL: MEMSignal.READ  TOS: 1      Z: 0 N: 0 V: 0
+  DS: [0]
+  [DEBUG]  TICK: 1027 PC: 10  ADDR: 10  mcADDR: 1  SIGNAL: MCAdrLatch.INC  TOS: 1      Z: 0 N: 0 V: 0
+  DS: [0]
+  [DEBUG]  TICK: 1028 PC: 10  ADDR: 10  mcADDR: 1  SIGNAL: IRLatch.MEM     TOS: 1      Z: 0 N: 0 V: 0
+  DS: [0]
+  [DEBUG]  TICK: 1029 PC: 10  ADDR: 10  mcADDR: 1  SIGNAL: Instraction.INC TOS: 1      Z: 0 N: 0 V: 0
+  DS: [0]
+  [DEBUG]  TICK: 1030 PC: 10  ADDR: 10  mcADDR: 35 SIGNAL: MCAdrLatch.IR   TOS: 1      Z: 0 N: 0 V: 0
+  DS: [0]
+  [DEBUG]  TICK: 1031 PC: 10  ADDR: 10  mcADDR: 35 SIGNAL: DSLatch.Push    TOS: 1      Z: 0 N: 0 V: 0
+  DS: [0, 1]
+  [DEBUG]  TICK: 1032 PC: 10  ADDR: 10  mcADDR: 35 SIGNAL: TosLatch.IR     TOS: 0      Z: 0 N: 0 V: 0
+  DS: [0, 1]
+  [DEBUG]  TICK: 1033 PC: 10  ADDR: 10  mcADDR: 35 SIGNAL: JUMPS.JZS       TOS: 0      Z: 0 N: 0 V: 0
+  DS: [0, 1]
+  [DEBUG]  TICK: 1034 PC: 10  ADDR: 10  mcADDR: 36 SIGNAL: MCAdrLatch.INC  TOS: 0      Z: 0 N: 0 V: 0
+  DS: [0, 1]
+  [DEBUG]  TICK: 1035 PC: 10  ADDR: 10  mcADDR: 36 SIGNAL: DSLatch.Pop     TOS: 0      Z: 0 N: 0 V: 0
+  DS: [0]
+  [DEBUG]  TICK: 1036 PC: 10  ADDR: 10  mcADDR: 36 SIGNAL: BRLatch.DS      TOS: 0      Z: 0 N: 0 V: 0
+  DS: []
+  [DEBUG]  TICK: 1037 PC: 10  ADDR: 10  mcADDR: 36 SIGNAL: TosLatch.BR     TOS: 0      Z: 0 N: 0 V: 0
+  DS: []
+  [DEBUG]  TICK: 1038 PC: 10  ADDR: 10  mcADDR: 37 SIGNAL: MCAdrLatch.INC  TOS: 0      Z: 0 N: 0 V: 0
+  DS: []
+  [DEBUG]  TICK: 1039 PC: 11  ADDR: 10  mcADDR: 37 SIGNAL: PCLatch.INC     TOS: 0      Z: 0 N: 0 V: 0
+  DS: []
+  [DEBUG]  TICK: 1040 PC: 11  ADDR: 10  mcADDR: 37 SIGNAL: Instraction.INC TOS: 0      Z: 0 N: 0 V: 0
+  DS: []
+  [DEBUG]  TICK: 1041 PC: 11  ADDR: 10  mcADDR: 0  SIGNAL: MCAdrLatch.ZERO TOS: 0      Z: 0 N: 0 V: 0
+  DS: []
+  [DEBUG]  TICK: 1042 PC: 11  ADDR: 11  mcADDR: 0  SIGNAL: ARLatch.PC      TOS: 0      Z: 0 N: 0 V: 0
+  DS: []
+  [DEBUG]  TICK: 1043 PC: 11  ADDR: 11  mcADDR: 0  SIGNAL: MEMSignal.READ  TOS: 0      Z: 0 N: 0 V: 0
+  DS: []
+  [DEBUG]  TICK: 1044 PC: 11  ADDR: 11  mcADDR: 1  SIGNAL: MCAdrLatch.INC  TOS: 0      Z: 0 N: 0 V: 0
+  DS: []
+  [DEBUG]  TICK: 1045 PC: 11  ADDR: 11  mcADDR: 1  SIGNAL: IRLatch.MEM     TOS: 0      Z: 0 N: 0 V: 0
+  DS: []
+  [DEBUG]  TICK: 1046 PC: 11  ADDR: 11  mcADDR: 1  SIGNAL: Instraction.INC TOS: 0      Z: 0 N: 0 V: 0
+  DS: []
+  [DEBUG]  TICK: 1047 PC: 11  ADDR: 11  mcADDR: 49 SIGNAL: MCAdrLatch.IR   TOS: 0      Z: 0 N: 0 V: 0
+  DS: []
+  [DEBUG]  TICK: 1048 PC: 11  ADDR: 11  mcADDR: 49 SIGNAL: Instraction.INC TOS: 0      Z: 0 N: 0 V: 0
+  DS: []
   [DEBUG]  output_buffer: 
   				ak lab3

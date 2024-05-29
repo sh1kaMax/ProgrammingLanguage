@@ -16,7 +16,7 @@
 {"index": 15, "opcode": "jzs", "arg": 1},
 {"index": 16, "opcode": "drop"},
 {"index": 17, "opcode": "halt", "term": [2, 1, "exit"]},
-{"index": 18, "arg": 13},
+{"index": 18, "arg": 12},
 {"index": 19, "arg": 72},
 {"index": 20, "arg": 101},
 {"index": 21, "arg": 108},
@@ -28,5 +28,4 @@
 {"index": 27, "arg": 111},
 {"index": 28, "arg": 114},
 {"index": 29, "arg": 108},
-{"index": 30, "arg": 100},
-{"index": 31, "arg": 33}]
+{"index": 30, "arg": 100}]

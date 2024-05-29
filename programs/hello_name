@@ -1,15 +1,37 @@
-: cat
+buffer name 20
+0 len !
+: read_name
     begin
         # dup dup
         0 !=
         if
-            emit
+            name len @ + !
+            len @
+            1 +
+            len !
         endif
         0 =
     until
 ;
 
+: print_name
+    0 len !
+    begin
+        name len @ + @
+        dup
+        dup
+        0 !=
+        if
+            emit
+            len @
+            1 +
+            len !
+        endif
+        0 =
+    until
+;
+
+read_name
 ." Hello, "
-cat
-." !"
+print_name
 exit

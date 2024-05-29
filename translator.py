@@ -11,6 +11,7 @@ from exceptions import (
     StartedProcedureInBranchError,
     StartedProcedureInLoopError,
     WrongTranslatorArgumentsError,
+    NewBufferInProcedureError
 )
 from isa import Opcode, Term, write_code
 
@@ -100,6 +101,15 @@ def text2terms(text):
                         procedures[procedure_name].append(Term(line_number, word_number, word))
                     else:
                         terms.append(Term(line_number, word_number, word))
+                elif word == 'buffer':
+                    if line_words[1] not in variable_names:
+                        variable_names[line_words[1]] = var_counter
+                        for i in range(int(line_words[2])):
+                            vars_count.append(word)
+                        var_counter += int(line_words[2])
+                        break
+                    if is_procedure:
+                        raise NewBufferInProcedureError()
                 elif word == ":":
                     if branch_counter == 0 and loop_counter == 0:
                         if not is_procedure:
@@ -129,15 +139,23 @@ def text2terms(text):
                 elif word[0:2] == '."':
                     break
                 else:
-                    if line_words[word_number] == "!" or line_words[word_number] == "@":
-                        if word not in variable_names:
-                            variable_names[word] = var_counter
-                            vars_count.append(word)
-                            var_counter += 1
-                        if is_procedure:
-                            procedures[procedure_name].append(Term(line_number, word_number, word))
-                        else:
-                            terms.append(Term(line_number, word_number, word))
+                    if line_words[-1] == "!" or line_words[-1] == "@":
+                        if len(line_words) == 2 or len(line_words) == 3:
+                            if word not in variable_names:
+                                variable_names[word] = var_counter
+                                vars_count.append(word)
+                                var_counter += 1
+                            if is_procedure:
+                                procedures[procedure_name].append(Term(line_number, word_number, word))
+                            else:
+                                terms.append(Term(line_number, word_number, word))
+                        if len(line_words) == 5:
+                            if is_procedure:
+                                procedures[procedure_name].append(Term(line_number, word_number, line.strip()))
+                                break
+                            else:
+                                terms.append(Term(line_number, word_number, line.strip()))
+                                break
                     else:
                         raise InvalidInputError(line_number, word_number, word)
 
@@ -247,9 +265,23 @@ def translate(text):
         elif is_number(words[0]):
             machine_code.append({"index": count, "opcode": Opcode.PUSH.value, "arg": words[0], "term": term})
         elif words[0] in variable_names:
-            machine_code.append(
-                {"index": count, "opcode": Opcode.ADDR_ON_TOP.value, "arg": variable_names[words[0]], "term": term}
-            )
+            if len(words) == 5:
+                machine_code.append({"index": count, "opcode": Opcode.ADDR_ON_TOP.value, "arg": variable_names[words[1]], "term": Term(term.line, 2, words[1])})
+                count += 1
+                machine_code.append({"index": count, "opcode": Opcode.VAR_ON_TOP.value, "term": Term(term.line, 3, words[2])})
+                count += 1
+                machine_code.append({"index": count, "opcode": Opcode.ADDR_ON_TOP.value, "arg": variable_names[words[0]], "term": Term(term.line, 1, words[0])})
+                count += 1
+                machine_code.append({"index": count, "opcode": Opcode.SUM.value, "term": Term(term.line, 4, words[3])})
+                count += 1
+                if words[4] == "!":
+                    machine_code.append({"index": count, "opcode": Opcode.SAVE_VAR, "term": Term(term.line, 5, words[4])})
+                else:
+                    machine_code.append({"index": count, "opcode": Opcode.VAR_ON_TOP.value, "term": Term(term.line, 5, words[4])})
+            else:
+                machine_code.append(
+                    {"index": count, "opcode": Opcode.ADDR_ON_TOP.value, "arg": variable_names[words[0]], "term": term}
+                )
         elif words[0] == '."':
             strings.append(str(" ".join(words)[3:-1]))
             massive, plus_count = translate_string(str(" ".join(words)[3:-1]), count)
@@ -278,6 +310,7 @@ def main(source, target):
 
     write_code(target, code)
     variable_names.clear()
+    vars_count.clear()
     print(f'Translated successfully. Source LoC: {len(source.split("\n"))} Code instruction: {len(code)}')
 
 
