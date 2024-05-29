@@ -26,6 +26,7 @@ class TosLatch(Enum):
     BR = 2
     ALU = 3
     IR_VAR = 4
+    IO = 5
 
 
 class ALUValues(Enum):
