@@ -15,19 +15,17 @@ __Форма Бэкуса-Наура:__
 
 ``` форма Бэкуса-Наура
 <program> ::= <term> | <term> "\n" <program>
-<term> ::= <variables> | <words> | <call_words>
-<variables> ::= <make_variable> | <set_variable> | <variable_on_top_stack>
-<make_variable> ::= "VARIABLE" <string_name>
+<term> ::= <variables> | <words> | <call_words> | <commands>
+<variables> ::= <set_variable> | <variable_on_top_stack>
 <string_name> ::= [A-Za-z][A-Za-z0-9]*
 <set_variable> ::= <number> <string_name> "!"
 <number> ::= -?[1-9][0-9]*
 <variable_on_top_stack> ::= <string_name> "@"
-<words> ::= ":" <string_name> <description> "\n" <commands> ";"
-<description> ::= "(" <type> "--" <string_name> ")"
-<type> ::= <string_name>
+<words> ::= ":" <string_name> "\n" <commands> ";"
+<call_words> ::= <string_name>
 <commands> ::= <command> | <command> "\n" <commands>
 <command> ::= "+" | "-" | "*" | "/" | "mod" | "dup" | "drop" | "swap"
-           | "=" | ">" | "<" | "." | "exit" | <variables> | <if> | <if_else | <loop>
+           | "=" | ">" | "<" | "." | "exit" | <variables> | <if> | <if_else | <loop> | "emit"
 <if> ::= "if" <term> "then"
 <if_else> ::= "if" <term> "else" <term> "then"
 <loop> ::= "begin" <term> "until"
@@ -78,13 +76,13 @@ __Форма Бэкуса-Наура:__
 
 Память команд и данных общая. Существует также DataStack, который может быть использован программистом  
 
-Память соответствует фон Неймановской архитектуре. Память программы состоит из: 1 элемент хранит в себе адрес начала хранения переменных, дальше хранятся машинные слова (32-x битные) от первого элемента до переменных, после хранятся сами переменные. Обращение к памяти производится через регистр adress_register
+Память соответствует фон Неймановской архитектуре. Память программы состоит из: 1 элемент хранит в себе адрес начала хранения переменных, дальше хранятся машинные слова от первого элемента до переменных, после хранятся сами переменные. Обращение к памяти производится через регистр adress_register
 
 ### Система команд
 
 ---
 
-- Машинное слово -- 32 бита
+- Машинное слово -- не определено. Передается как словарь
 - Доступ к памяти осуществляется по адресу, хранящемуся в регистре PC. Изменить данный регистр можно следующими способами:
   - Инкрементировать данный регистр
   - Записи аргумента из машинного слова (при таких контрукциях как jmp, jzs)
