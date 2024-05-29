@@ -25,7 +25,7 @@ __Форма Бэкуса-Наура:__
 <call_words> ::= <string_name>
 <commands> ::= <command> | <command> "\n" <commands>
 <command> ::= "+" | "-" | "*" | "/" | "mod" | "dup" | "drop" | "swap"
-           | "=" | ">" | "<" | "." | "exit" | <variables> | <if> | <if_else | <loop>
+           | "=" | ">" | "<" | "." | "exit" | <variables> | <if> | <if_else | <loop> | "emit"
 <if> ::= "if" <term> "then"
 <if_else> ::= "if" <term> "else" <term> "then"
 <loop> ::= "begin" <term> "until"
