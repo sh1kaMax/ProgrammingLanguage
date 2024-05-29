@@ -8,10 +8,10 @@ from exceptions import (
     InvalidInputError,
     LoopNotBalancedError,
     NestedProcedureCreationError,
+    NewBufferInProcedureError,
     StartedProcedureInBranchError,
     StartedProcedureInLoopError,
     WrongTranslatorArgumentsError,
-    NewBufferInProcedureError,
 )
 from isa import Opcode, Term, write_code
 
@@ -153,9 +153,8 @@ def text2terms(text):
                             if is_procedure:
                                 procedures[procedure_name].append(Term(line_number, word_number, line.strip()))
                                 break
-                            else:
-                                terms.append(Term(line_number, word_number, line.strip()))
-                                break
+                            terms.append(Term(line_number, word_number, line.strip()))
+                            break
                     else:
                         raise InvalidInputError(line_number, word_number, word)
 

@@ -72,4 +72,4 @@ class InvalidSignalError(Exception):
 
 class NewBufferInProcedureError(Exception):
     def __init__(self):
-        super().__init__(f"Error: cannot make new buffer in procedure")
+        super().__init__("Error: cannot make new buffer in procedure")
