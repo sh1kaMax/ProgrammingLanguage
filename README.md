@@ -15,15 +15,14 @@ __Форма Бэкуса-Наура:__
 
 ``` форма Бэкуса-Наура
 <program> ::= <term> | <term> "\n" <program>
-<term> ::= <variables> | <words> | <call_words>
+<term> ::= <variables> | <words> | <call_words> | <commands>
 <variables> ::= <set_variable> | <variable_on_top_stack>
 <string_name> ::= [A-Za-z][A-Za-z0-9]*
 <set_variable> ::= <number> <string_name> "!"
 <number> ::= -?[1-9][0-9]*
 <variable_on_top_stack> ::= <string_name> "@"
-<words> ::= ":" <string_name> <description> "\n" <commands> ";"
-<description> ::= "(" <type> "--" <string_name> ")"
-<type> ::= <string_name>
+<words> ::= ":" <string_name> "\n" <commands> ";"
+<call_words> ::= <string_name>
 <commands> ::= <command> | <command> "\n" <commands>
 <command> ::= "+" | "-" | "*" | "/" | "mod" | "dup" | "drop" | "swap"
            | "=" | ">" | "<" | "." | "exit" | <variables> | <if> | <if_else | <loop>
