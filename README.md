@@ -279,7 +279,7 @@ jobs:
 
 Пример использования и журнал работы прроцессора на примере `cat`:
 
-```code 
+```code
 (.venv) PS C:\Users\Max\Dropbox\ComputerArchitecture\lab3\ProgrammingLanguage> cat ./programs/cat
 : cat                                                                          
     begin                                                                      
@@ -601,7 +601,7 @@ tick: 140
 
 Пример проверки исходного кода:
 
-```test 
+```test
 (.venv) PS C:\Users\Max\Dropbox\ComputerArchitecture\lab3\ProgrammingLanguage> poetry run pytest . -v
 =============================================================================== test session starts ===============================================================================
 platform win32 -- Python 3.12.0, pytest-7.4.4, pluggy-1.5.0 -- C:\Users\Max\Dropbox\ComputerArchitecture\lab3\ProgrammingLanguage\.venv\Scripts\python.exe
