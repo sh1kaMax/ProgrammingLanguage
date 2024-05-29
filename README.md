@@ -16,8 +16,7 @@ __Форма Бэкуса-Наура:__
 ``` форма Бэкуса-Наура
 <program> ::= <term> | <term> "\n" <program>
 <term> ::= <variables> | <words> | <call_words>
-<variables> ::= <make_variable> | <set_variable> | <variable_on_top_stack>
-<make_variable> ::= "VARIABLE" <string_name>
+<variables> ::= <set_variable> | <variable_on_top_stack>
 <string_name> ::= [A-Za-z][A-Za-z0-9]*
 <set_variable> ::= <number> <string_name> "!"
 <number> ::= -?[1-9][0-9]*
