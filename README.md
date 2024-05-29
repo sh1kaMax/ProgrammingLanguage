@@ -103,7 +103,7 @@ __Форма Бэкуса-Наура:__
 | Fetch | 6 |
 | ADD | 7 |
 | SUB | 7 |
-| MUL | 7 | 
+| MUL | 7 |
 | DIV | 7 |
 | MOD | 7 |
 | DUP | 5 |
@@ -120,8 +120,8 @@ __Форма Бэкуса-Наура:__
 | JZS | 11 |
 | JMP | 10 |
 | PRINT | 8 |
-| READ | 6 | 
-| EMIT | 8 | 
+| READ | 6 |
+| EMIT | 8 |  
 | HALT | 2 |
 
 Такты каждой интрукции высчитываются по тому, сколько в ней есть сигналов, который посылаются машине. Инструкция fetch нужна для выборки следующей команды
@@ -146,7 +146,7 @@ __Форма Бэкуса-Наура:__
 
 #### DataPath
 
-![](images/DataPath.jpg)
+![datapath](images/DataPath.jpg)
 Реализован в классе [DataPath](data_path.py)  
 `IR` - регистр для хранения машинного слова  
 `PC` - указатель на место в памяти, от куда брать следующее машинное слово  
@@ -159,7 +159,7 @@ __Форма Бэкуса-Наура:__
 
 #### ControlUnit
 
-![](images/ControlUnit.png)
+![control_unit](images/ControlUnit.png)
 Реализован в классе [ControlUnit](control_unit.py)  
 `mc_adr` - регистр для хранения адреса микрокоманды, которую надо выполнить  
 `MicrocodeMemory` - память микрокоманд, где прописана каждая интрукция  
@@ -202,6 +202,7 @@ __Форма Бэкуса-Наура:__
 Тестирование выполняется при помощи golden-тестов  
 Запуск golden-тестов: [golden_test](golden_test.py)  
 Тесты:
+
 - [golden/cat.yml](golden/cat.yml) - Выводит символы в stdout из stdin, пока не закончаться в буфере
 - [golden/hello_name.yml](golden/hello_name.yml) - Запрашивает у пользователя имя и здоровается с ним
 - [golden/hello_world.yml](golden/hello_world.yml) - Выводит в stdou "Hello, World!"
@@ -209,6 +210,7 @@ __Форма Бэкуса-Наура:__
 
 Запустить тесты: `poetry run pytest . -v`  
 CI при помощи GitHub Actions:
+
 ```yaml
 name: Python CI
 
@@ -267,13 +269,16 @@ jobs:
       - name: Run Ruff linters
         run: poetry run ruff check --ignore=C901 .
 ```
+
 где:
+
 - poetry - инструмент для управления зависимостьями в Python
 - coverage - формирование отчета об уровне покрытия исходного кода тестами
-- pytest - утилита для запуска тестов 
-- rugg - утилита для формирования и проверки стиля кода  
+- pytest - утилита для запуска тестов
+- rugg - утилита для формирования и проверки стиля кода
 
 Пример использования и журнал работы прроцессора на примере `cat`:
+
 ```code 
 (.venv) PS C:\Users\Max\Dropbox\ComputerArchitecture\lab3\ProgrammingLanguage> cat ./programs/cat
 : cat                                                                          
@@ -593,7 +598,9 @@ a
 instraction_count: 21
 tick: 140
 ```
+
 Пример проверки исходного кода:
+
 ```test 
 (.venv) PS C:\Users\Max\Dropbox\ComputerArchitecture\lab3\ProgrammingLanguage> poetry run pytest . -v
 =============================================================================== test session starts ===============================================================================
@@ -609,6 +616,7 @@ golden_test.py::test_program[golden/hello_name.yml] PASSED                      
 golden_test.py::test_program[golden/hello_world.yml] PASSED                                                                                                                  [ 75%]
 golden_test.py::test_program[golden/prob2.yml] PASSED                                                                                                                        [100%]
 ```
+
 ```table
 | ФИО                       | алг            | LoC | code инстр. | инстр. | такт. |
 | Шикунов Максим Евгеньевич | cat            | 12  | 11          | 141    | 932   |
