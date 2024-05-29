@@ -11,7 +11,7 @@ from exceptions import (
     StartedProcedureInBranchError,
     StartedProcedureInLoopError,
     WrongTranslatorArgumentsError,
-    NewBufferInProcedureError
+    NewBufferInProcedureError,
 )
 from isa import Opcode, Term, write_code
 
@@ -101,7 +101,7 @@ def text2terms(text):
                         procedures[procedure_name].append(Term(line_number, word_number, word))
                     else:
                         terms.append(Term(line_number, word_number, word))
-                elif word == 'buffer':
+                elif word == "buffer":
                     if line_words[1] not in variable_names:
                         variable_names[line_words[1]] = var_counter
                         for i in range(int(line_words[2])):
@@ -266,18 +266,38 @@ def translate(text):
             machine_code.append({"index": count, "opcode": Opcode.PUSH.value, "arg": words[0], "term": term})
         elif words[0] in variable_names:
             if len(words) == 5:
-                machine_code.append({"index": count, "opcode": Opcode.ADDR_ON_TOP.value, "arg": variable_names[words[1]], "term": Term(term.line, 2, words[1])})
+                machine_code.append(
+                    {
+                        "index": count,
+                        "opcode": Opcode.ADDR_ON_TOP.value,
+                        "arg": variable_names[words[1]],
+                        "term": Term(term.line, 2, words[1]),
+                    }
+                )
                 count += 1
-                machine_code.append({"index": count, "opcode": Opcode.VAR_ON_TOP.value, "term": Term(term.line, 3, words[2])})
+                machine_code.append(
+                    {"index": count, "opcode": Opcode.VAR_ON_TOP.value, "term": Term(term.line, 3, words[2])}
+                )
                 count += 1
-                machine_code.append({"index": count, "opcode": Opcode.ADDR_ON_TOP.value, "arg": variable_names[words[0]], "term": Term(term.line, 1, words[0])})
+                machine_code.append(
+                    {
+                        "index": count,
+                        "opcode": Opcode.ADDR_ON_TOP.value,
+                        "arg": variable_names[words[0]],
+                        "term": Term(term.line, 1, words[0]),
+                    }
+                )
                 count += 1
                 machine_code.append({"index": count, "opcode": Opcode.SUM.value, "term": Term(term.line, 4, words[3])})
                 count += 1
                 if words[4] == "!":
-                    machine_code.append({"index": count, "opcode": Opcode.SAVE_VAR, "term": Term(term.line, 5, words[4])})
+                    machine_code.append(
+                        {"index": count, "opcode": Opcode.SAVE_VAR, "term": Term(term.line, 5, words[4])}
+                    )
                 else:
-                    machine_code.append({"index": count, "opcode": Opcode.VAR_ON_TOP.value, "term": Term(term.line, 5, words[4])})
+                    machine_code.append(
+                        {"index": count, "opcode": Opcode.VAR_ON_TOP.value, "term": Term(term.line, 5, words[4])}
+                    )
             else:
                 machine_code.append(
                     {"index": count, "opcode": Opcode.ADDR_ON_TOP.value, "arg": variable_names[words[0]], "term": term}
